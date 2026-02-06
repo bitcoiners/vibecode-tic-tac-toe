@@ -1,0 +1,30 @@
+{
+  "name": "vibecode-tic-tac-toe",
+  "version": "1.0.0",
+  "description": "A live, two-player Tic-Tac-Toe game designed for quick, fun sessions between friends. Players can instantly start a game by sharing a link and take turns directly from their mobile browsers—no downloads required.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitcoiners/vibecode-tic-tac-toe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bitcoiners/vibecode-tic-tac-toe/issues"
+  },
+  "homepage": "https://github.com/bitcoiners/vibecode-tic-tac-toe#readme",
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
+    "jest": "^30.2.0"
+  }
+}
