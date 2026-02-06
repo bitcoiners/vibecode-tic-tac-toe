@@ -1,40 +1,68 @@
 // src/gameEngine.js
 
-/**
- * Check the status of a Tic-Tac-Toe board.
- * @param {Array} board - A flat array of 9 strings representing the board.
- * @returns {Object} {status: 'win'|'tie'|'playing', winner: 'X'|'O'|null}
- */
+// Game state (private)
+let gameState = {
+  board: ['', '', '', '', '', '', '', '', ''],
+  currentPlayer: 'X',
+  status: 'playing',
+  winner: null
+};
+
+// Private helper function
+function updateGameStatus() {
+  const result = checkGameStatus(gameState.board);
+  gameState.status = result.status;
+  gameState.winner = result.winner;
+}
+
+// Public API functions
 export function checkGameStatus(board) {
   const winPatterns = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-    [0, 4, 8], [2, 4, 6]             // Diagonals
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
   ];
 
-  // Check for a win
   for (const [a, b, c] of winPatterns) {
-    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return {
-        status: 'win',
-        winner: board[a]
-      };
+    if (board[a] !== '' && board[a] === board[b] && board[a] === board[c]) {
+      return { status: 'win', winner: board[a] };
     }
   }
 
-  // Check for tie (board full with no winner)
   if (board.every(cell => cell !== '')) {
-    return {
-      status: 'tie',
-      winner: null
-    };
+    return { status: 'tie', winner: null };
   }
 
-  // Game is still in progress
-  return {
+  return { status: 'playing', winner: null };
+}
+
+export function getState() {
+  return { ...gameState }; // Return a copy to prevent direct mutation
+}
+
+export function makeMove(cellIndex) {
+  // Validate move
+  if (cellIndex < 0 || cellIndex > 8) return; // Out of bounds
+  if (gameState.status !== 'playing') return; // Game ended
+  if (gameState.board[cellIndex] !== '') return; // Cell occupied
+
+  // Make the move
+  gameState.board[cellIndex] = gameState.currentPlayer;
+  
+  // Update game status
+  updateGameStatus();
+  
+  // Switch player if game is still playing
+  if (gameState.status === 'playing') {
+    gameState.currentPlayer = gameState.currentPlayer === 'X' ? 'O' : 'X';
+  }
+}
+
+export function resetGame() {
+  gameState = {
+    board: ['', '', '', '', '', '', '', '', ''],
+    currentPlayer: 'X',
     status: 'playing',
     winner: null
   };
 }
-
-// Note: We'll add makeMove, getState, resetGame later
