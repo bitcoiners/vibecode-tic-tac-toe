@@ -58,6 +58,13 @@ The application follows a **Model-View-Controller (MVC)** pattern adapted for a 
 
 ## 6. Development Workflow & TDD Plan
 
+### Core TDD Protocol: Red-Green-Refactor
+All development must strictly follow this cycle:
+
+1.  **Red**: Write a failing test that describes the desired functionality.
+2.  **Green**: Write the minimal amount of code required to make the test pass.
+3.  **Refactor**: Improve the code structure and clarity while keeping all tests passing.
+
 ### 6.1 Test-Driven Development Order
 We will build **from the inside out**, starting with the most isolated, business-logic module.
 
