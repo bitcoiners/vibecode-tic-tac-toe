@@ -35,7 +35,7 @@ open test-ai-simple.html
 - [x] **Game lobby** - Room creation and joining
 - [x] **Comprehensive testing** - 107 passing tests
 
-### 🔄 In Development
+- [ ] **Code refactoring** - Architecture improvements (CURRENT)
 - [ ] **Score tracking** - Win/loss statistics & game history
 - [ ] **Player profiles** - Avatars and customization
 - [ ] **Private rooms** - Password protection
@@ -137,10 +137,8 @@ chore: maintenance
 - **Phase 4-5**: Multiplayer synchronization, game lobby
 - **Phase 6**: Testing infrastructure, coverage enforcement
 
-### 🚀 Next Phase (Ready to Start)
-- **Phase 8**: Score tracking & game history system
-
-## 📁 FILES CREATED/MODIFIED IN PHASE 7
+### 🔄 Current Phase
+- **Refactoring**: Codebase architecture improvements
 
 ### New Files:
 ```
