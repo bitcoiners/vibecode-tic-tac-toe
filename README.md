@@ -1,47 +1,30 @@
 # Tic-Tac-Toe PWA - Live Multiplayer Game
 
-A live, two-player Tic-Tac-Toe Progressive Web App designed for quick, fun sessions between friends. Players can instantly start a game by sharing a link, install it on their mobile home screens, and play in real-time—no downloads required.
+A **live, two-player Tic-Tac-Toe Progressive Web App** designed for quick, fun sessions between friends. Players can instantly start a game by sharing a link, install it on their mobile home screens, and play in real-time—no downloads required.
 
-## 🚀 Live Demo & Quick Start
+## 🚀 Live Demo
 
-Play Now (Local Development):
+**Play Now:** https://vibecode-tic-tac-toe.onrender.com
 
-    # 1. Clone and install
-    git clone https://github.com/bitcoiners/vibecode-tic-tac-toe.git
-    cd vibecode-tic-tac-toe
-    npm install
-
-    # 2. Run tests (99 tests)
-    npm test
-
-    # 3. Start the game server
-    npm start
-
-    # 4. Open in browser: http://localhost:3000
-
-PWA Installation:
-1. Open the game in Chrome/Edge on your mobile device
-2. Tap "Add to Home Screen" or "Install" prompt
-3. Enjoy the native app experience!
+**PWA Installation:** Open the link in Chrome/Edge on mobile, tap "Add to Home Screen" for native app experience.
 
 ## 📱 Features
 
-### ✅ Completed Features (Phase 1-4)
-
-Feature | Status | Description
---------|--------|-------------
-Responsive Game Board | ✅ Complete | 3x3 grid optimized for mobile touch
-Turn-Based Gameplay | ✅ Complete | Alternating X/O turns with validation
-Win/Tie Detection | ✅ Complete | Detects all win patterns and draws
-Live Multiplayer | ✅ Complete | Real-time sync via Socket.io
-Game Lobby | ✅ Complete | Create/Join rooms with shareable URLs
-PWA Installation | ✅ Complete | Installable on mobile home screens
-Offline Support | ✅ Complete | Service worker caches game assets
-Connection Status | ✅ Complete | Visual indicators for network state
-Player Roles | ✅ Complete | Shows Host/Player/Spectator status
+### ✅ Completed Features
+| Feature | Status | Description |
+|---------|--------|-------------|
+| **Responsive Game Board** | ✅ Complete | 3x3 grid optimized for mobile touch |
+| **Turn-Based Gameplay** | ✅ Complete | Alternating X/O turns with validation |
+| **Win/Tie Detection** | ✅ Complete | Detects all win patterns and draws |
+| **Live Multiplayer** | ✅ Complete | Real-time sync via Socket.io |
+| **Game Lobby** | ✅ Complete | Create/Join rooms with shareable URLs |
+| **PWA Installation** | ✅ Complete | Installable on mobile home screens |
+| **Offline Support** | ✅ Complete | Service worker caches game assets |
+| **Connection Status** | ✅ Complete | Visual indicators for network state |
+| **Player Roles** | ✅ Complete | Shows Host/Player/Spectator status |
+| **Cloud Deployment** | ✅ Complete | Deployed to Render.com (free tier) |
 
 ### 🔄 How to Play Multiplayer
-
 1. **Player 1:** Click "Create Game" → Get shareable room URL
 2. **Share:** Send URL to friend (any messaging app)
 3. **Player 2:** Open URL → Click "Join Game"
@@ -57,6 +40,7 @@ Player Roles | ✅ Complete | Shows Host/Player/Spectator status
     │   ├── gameLobby.js       # Lobby interface (12 tests)
     │   └── server.js          # Express + Socket.io backend
     ├── 📁 public/
+    │   ├── index.html         # Main application interface
     │   ├── manifest.json      # PWA configuration
     │   └── service-worker.js  # Offline support
     ├── 📁 tests/              # 99 comprehensive tests
@@ -64,13 +48,13 @@ Player Roles | ✅ Complete | Shows Host/Player/Spectator status
 
 ## 🧪 Development & Testing
 
-Test-Driven Development:
-This project follows Red-Green-Refactor TDD cycle:
+### Test-Driven Development
+This project follows **Red-Green-Refactor TDD cycle**:
 1. **Red** - Write failing tests for new functionality
 2. **Green** - Implement minimal code to pass tests
 3. **Refactor** - Improve code while keeping tests green
 
-Test Status:
+### Test Status
 
     # Run all tests
     npm test
@@ -86,36 +70,49 @@ Test Status:
 
 ## 📊 Project Progress
 
-Phase | Status | Key Deliverables
-------|--------|------------------
-✅ Phase 1 | Complete | Game engine with 29 unit tests
-✅ Phase 2 | Complete | Mobile UI with 17 UI/UX tests
-✅ Phase 3 | Complete | Real-time multiplayer (26 tests)
-✅ Phase 4 | Complete | PWA with lobby (12 + 3 tests)
-⏳ Phase 5 | Planned | Deployment to cloud hosting
-⏳ Phase 6 | Planned | Advanced features & polish
+| Phase | Status | Key Deliverables |
+|-------|--------|------------------|
+| **✅ Phase 1** | Complete | Game engine with 29 unit tests |
+| **✅ Phase 2** | Complete | Mobile UI with 17 UI/UX tests |
+| **✅ Phase 3** | Complete | Real-time multiplayer (26 tests) |
+| **✅ Phase 4** | Complete | PWA with lobby (15 tests) |
+| **✅ Phase 5** | Complete | **Deployed to Render.com** |
+| **🔄 Phase 6** | Current | Bug fixes & polish |
+| **⏳ Phase 7** | Future | Advanced features |
 
-## 🚀 Deployment
+## 🚀 Quick Start
 
-Local Development:
+### Local Development
 
-    npm run dev    # Development server (port 3001)
-    npm start      # Production server (port 3000)
-    npm test       # Run all 99 tests
+    # 1. Clone and install
+    git clone https://github.com/bitcoiners/vibecode-tic-tac-toe.git
+    cd vibecode-tic-tac-toe
+    npm install
 
-Cloud Deployment:
-Ready for deployment to:
-- **Render.com** (Free tier)
-- **Railway.app** (Free tier)  
-- **Vercel** (Free tier)
-- **Fly.io** (Free tier)
+    # 2. Run tests (99 tests)
+    npm test
+
+    # 3. Start development server
+    npm run dev
+    # Open: http://localhost:3001
+
+    # 4. Start production server
+    npm start
+    # Open: http://localhost:3000
+
+### Cloud Deployment
+- **Live URL:** https://vibecode-tic-tac-toe.onrender.com
+- **Platform:** Render.com (free tier)
+- **Auto-deploy:** On push to main branch
+- **Health Check:** `/health` endpoint
 
 ## 🔧 Technical Stack
 
-- **Frontend:** Vanilla JavaScript, CSS Grid, Socket.io-client
+- **Frontend:** Vanilla JavaScript, CSS Grid, Socket.io-client (CDN)
 - **Backend:** Node.js, Express, Socket.io
 - **Testing:** Jest, JSDOM
 - **PWA:** Web App Manifest, Service Workers
+- **Hosting:** Render.com
 - **Architecture:** MVC Pattern
 
 ## 📱 PWA Capabilities
@@ -126,13 +123,25 @@ Ready for deployment to:
 - **Responsive:** Optimized for all mobile screen sizes
 - **Native Experience:** Fullscreen, standalone app mode
 
+## 🐛 Known Issues & Next Steps
+
+### Current Focus (Phase 6)
+The app is deployed and functional. Current work involves:
+1. Fixing connection stability issues
+2. Improving UI/UX and status displays
+3. Enhancing game state synchronization
+4. Optimizing mobile touch interactions
+
+### Report Issues
+Found a bug? Please document it in the issue tracker or update `docs/deepseek-chat-continue.md`.
+
 ## 🤝 Contributing
 
-This project was built using AI-assisted "vibe coding" with GitHub Copilot Chat, following TDD principles. The development process is documented in `docs/deepseek-chat-continue.md`.
+This project was built using **AI-assisted "vibe coding"** with GitHub Copilot Chat, following TDD principles. The development process is documented in `docs/deepseek-chat-continue.md`.
 
 ## 📄 License
 
-ISC License - See LICENSE file for details.
+ISC License - See [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -143,4 +152,4 @@ ISC License - See LICENSE file for details.
 
 ---
 
-🎮 Ready to play? Open http://localhost:3000 after running `npm start`!
+**🎮 Ready to play?** Visit https://vibecode-tic-tac-toe.onrender.com or run locally with `npm start`!
