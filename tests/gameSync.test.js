@@ -8,6 +8,7 @@ describe('GameSync', () => {
   let gameSync;
   let originalIo;
   let originalWarn;
+  let originalLog;
   let originalWindow;
   
   beforeEach(() => {
@@ -30,7 +31,9 @@ describe('GameSync', () => {
     
     // Mock console.warn to prevent test output
     originalWarn = console.warn;
+    originalLog = console.log;
     console.warn = jest.fn();
+    console.log = jest.fn();
     
     // Mock window
     originalWindow = global.window;
@@ -43,6 +46,7 @@ describe('GameSync', () => {
     // Restore globals
     global.io = originalIo;
     console.warn = originalWarn;
+    console.log = originalLog;
     global.window = originalWindow;
   });
   
