@@ -1,169 +1,125 @@
-// src/gameSync.js
-
-
 /**
- * GameSync - Network controller for real-time multiplayer state sync
- * Manages WebSocket communication between two players in the same room.
+ * GameSync - Multiplayer Synchronization Module
+ * Now with dependency injection for testability
  * 
- * Architecture:
- * - Each player running the game shares a roomId via a URL
- * - Socket.io handles real-time bidirectional communication
- * - Remote state updates are applied via gameEngine.applyRemoteState()
- * - Local moves broadcast state via broadcastState()
+ * @param {string} roomId - Unique room identifier
+ * @param {Function} [ioDependency] - Socket.io client (optional, defaults to window.io)
+ * @returns {Object} GameSync instance with multiplayer methods
  */
-
-export default function createGameSync(roomId) {
-  // ═══════════════════════════════════════════════════════════
-  // VALIDATION
-  // ═══════════════════════════════════════════════════════════
-  if (!roomId || typeof roomId !== 'string' || roomId.trim() === '') {
+export default function createGameSync(roomId, ioDependency) {
+  // ========== INPUT VALIDATION ==========
+  if (!roomId) {
     throw new Error('Room ID is required');
   }
-
-  // ═══════════════════════════════════════════════════════════
-  // INITIALIZATION
-  // ═══════════════════════════════════════════════════════════
+  
+  if (typeof roomId !== 'string') {
+    throw new Error('Room ID must be a string');
+  }
+  
+  // ========== DEPENDENCY RESOLUTION ==========
+  // Determine the io function to use (browser vs tests)
+  const getIo = () => {
+    // Priority 1: Provided dependency (for testing)
+    if (ioDependency) {
+      return ioDependency;
+    }
+    
+    // Priority 2: Browser global (production)
+    if (typeof window !== 'undefined' && window.io) {
+      return window.io;
+    }
+    
+    // Priority 3: Node.js global (test environment setup)
+    if (typeof global !== 'undefined' && global.io) {
+      return global.io;
+    }
+    
+    throw new Error(
+      'Socket.io client (io) not found. ' +
+      'In browser: Load Socket.io client CDN. ' +
+      'In tests: Set global.io = mockIoFunction before importing.'
+    );
+  };
+  
+  const io = getIo();
+  
+  // ========== SOCKET INITIALIZATION ==========
   const socket = io('/', {
     query: { roomId },
     transports: ['websocket', 'polling'],
   });
-
-  let engine = null;
-  const eventListeners = new Map();
-
-  // ═══════════════════════════════════════════════════════════
-  // EVENT HANDLERS
-  // ═══════════════════════════════════════════════════════════
-
-  /**
-   * Handle incoming state from remote player
-   */
-  function handleRemoteState(data) {
-    if (!data || !data.state) return;
-    if (engine && typeof engine.applyRemoteState === 'function') {
-      engine.applyRemoteState(data.state);
+  
+  // Store local game engine reference for state synchronization
+  let localGameEngine = null;
+  
+  // ========== EVENT HANDLERS ==========
+  // Listen for remote game state updates
+  socket.on('game:state', (remoteState) => {
+    if (!remoteState || !localGameEngine) {
+      return;
     }
-  }
-
-  socket.on('game:state', handleRemoteState);
-
-  // ═══════════════════════════════════════════════════════════
-  // PUBLIC API
-  // ═══════════════════════════════════════════════════════════
+    
+    try {
+      // Apply remote state to local game engine
+      localGameEngine.applyRemoteState(remoteState);
+    } catch (error) {
+      console.warn('Failed to apply remote state:', error);
+    }
+  });
+  
+  // ========== PUBLIC API ==========
   return {
-    // Properties exposed for testing
-    socket,
-    engine,
-    eventListeners,
-
-    // ─────────────────────────────────────────────────────────
-    // Engine Integration
-    // ─────────────────────────────────────────────────────────
-
-    /**
-     * Register the local game engine instance.
-     * This engine will receive remote state updates.
-     * @param {Object} gameEngine - Instance with getState() and applyRemoteState()
-     */
-    setLocalEngine(gameEngine) {
-      if (!gameEngine) {
-        throw new Error('Game engine is required');
-      }
-      engine = gameEngine;
-      this.engine = gameEngine;
-    },
-
-    // ─────────────────────────────────────────────────────────
-    // State Broadcasting
-    // ─────────────────────────────────────────────────────────
-
-    /**
-     * Broadcast the current game state to the remote player.
-     * Called after the local player makes a move.
-     * @param {Object} state - Game state object with board, currentPlayer, status, winner
-     */
-    broadcastState(state) {
-      if (!state) {
-        throw new Error('Game state is required');
-      }
-
-      socket.emit('game:state', {
-        roomId,
-        state,
-        timestamp: Date.now(),
-      });
-    },
-
-    // ─────────────────────────────────────────────────────────
     // Connection Management
-    // ─────────────────────────────────────────────────────────
-
-    /**
-     * Disconnect from the server.
-     */
-    disconnect() {
-      socket.disconnect();
-    },
-
-    /**
-     * Get the current connection status.
-     * @returns {boolean} true if connected to server
-     */
-    getIsConnected() {
-      return socket.connected === true;
-    },
-
-    // ─────────────────────────────────────────────────────────
-    // Room & Sharing
-    // ─────────────────────────────────────────────────────────
-
-    /**
-     * Get the room ID for this game session.
-     * @returns {string} Unique room identifier
-     */
-    getRoomId() {
-      return roomId;
-    },
-
-    /**
-     * Generate a shareable URL that another player can visit to join.
-     * The URL includes the room ID as a query parameter.
-     * @returns {string} Full shareable URL
-     */
-    getShareableUrl() {
-      const baseUrl = window.location.origin + window.location.pathname;
-      return `${baseUrl}?room=${encodeURIComponent(roomId)}`;
-    },
-
-    // ─────────────────────────────────────────────────────────
-    // Custom Event Listeners
-    // ─────────────────────────────────────────────────────────
-
-    /**
-     * Register a custom event listener.
-     * @param {string} eventName - Name of the event
-     * @param {Function} handler - Callback function
-     */
-    on(eventName, handler) {
-      if (!eventListeners.has(eventName)) {
-        eventListeners.set(eventName, []);
+    disconnect: () => {
+      if (socket && socket.connected) {
+        socket.disconnect();
       }
-      eventListeners.get(eventName).push(handler);
     },
-
-    /**
-     * Remove a custom event listener.
-     * @param {string} eventName - Name of the event
-     * @param {Function} handler - Callback function to remove
-     */
-    off(eventName, handler) {
-      if (eventListeners.has(eventName)) {
-        const listeners = eventListeners.get(eventName);
-        const index = listeners.indexOf(handler);
-        if (index > -1) {
-          listeners.splice(index, 1);
+    
+    getIsConnected: () => socket.connected,
+    
+    // State Synchronization
+    broadcastState: (state) => {
+      if (!state) {
+        throw new Error('State is required for broadcast');
+      }
+      socket.emit('game:state', state);
+    },
+    
+    registerLocalGameEngine: (engine) => {
+      if (!engine || typeof engine.applyRemoteState !== 'function') {
+        throw new Error('Valid game engine with applyRemoteState method is required');
+      }
+      localGameEngine = engine;
+    },
+    
+    // Room Information
+    getRoomId: () => roomId,
+    
+    getShareableUrl: () => {
+      // Dynamic window check at call time
+      const getCurrentOrigin = () => {
+        if (typeof window !== 'undefined' && window.location && window.location.origin) {
+          return window.location.origin;
         }
-      }
+        return 'http://localhost:3000';
+      };
+      
+      return `${getCurrentOrigin()}?room=${encodeURIComponent(roomId)}`;
     },
+    
+    // Event Management
+    onConnect: (handler) => {
+      socket.on('connect', handler);
+      return () => socket.off('connect', handler);
+    },
+    
+    onDisconnect: (handler) => {
+      socket.on('disconnect', handler);
+      return () => socket.off('disconnect', handler);
+    },
+    
+    // For testing only - exposes internal socket
+    _getSocket: () => socket,
   };
 }
