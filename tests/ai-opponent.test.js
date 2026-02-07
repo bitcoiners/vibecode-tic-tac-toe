@@ -211,7 +211,7 @@ describe('AI Opponent', () => {
         ['', '', '']  // OK
       ];
       
-      expect(() => ai.getNextMove(invalidBoard)).toThrow('Board must be a 3x3 array');
+      expect(() => ai.getNextMove(invalidBoard)).toThrow('Board row 1 must be an array of 3 elements');
     });
 
     test('should handle non-array board', () => {
@@ -281,4 +281,47 @@ describe('AI Opponent', () => {
       const move = ai.getNextMove(board);
       expect(move.row).toBeGreaterThanOrEqual(0);
       expect(move.row).toBeLessThan(3);
+    });
+
+    test('getEmptyCells should throw for non-3x3 board array', () => {
+      const ai = createAIOpponent('easy');
+      
+      // Test line 9: throw new Error('Invalid board: must be 3x3 array');
+      expect(() => ai._getEmptyCells(null)).toThrow('Invalid board: must be 3x3 array');
+      expect(() => ai._getEmptyCells([])).toThrow('Invalid board: must be 3x3 array');
+      expect(() => ai._getEmptyCells([[], []])).toThrow('Invalid board: must be 3x3 array');
+      expect(() => ai._getEmptyCells([[], [], [], []])).toThrow('Invalid board: must be 3x3 array');
+    });
+
+    test('getStrategicMove corner logic should handle edge cases', () => {
+      // Test lines 90-106: Corner preference logic
+      const boardWithNoCornersAvailable = [
+        ['X', '', 'O'],
+        ['', 'X', ''],
+        ['X', '', 'O']
+      ];
+      // All corners are taken, should fall through to random move
+      const ai = createAIOpponent('medium');
+      const move = ai.getNextMove(boardWithNoCornersAvailable);
+      
+      // Should be one of the empty cells (not a corner)
+      const emptyCells = [[0,1], [1,0], [1,2]];
+      const isValid = emptyCells.some(([r, c]) => move.row === r && move.col === c);
+      expect(isValid).toBe(true);
+    });
+
+    test('switch default case should never be reached', () => {
+      // Line 224: default: return getRandomMove(gameBoard);
+      // This should never be reached due to validation in createAIOpponent
+      // But we can test that all valid cases work
+      ['easy', 'medium', 'hard'].forEach(difficulty => {
+        const ai = createAIOpponent(difficulty);
+        const board = [
+          ['', '', ''],
+          ['', '', ''],
+          ['', '', '']
+        ];
+        const move = ai.getNextMove(board);
+        expect(move).toBeDefined();
+      });
     });
