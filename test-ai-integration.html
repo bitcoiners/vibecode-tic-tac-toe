@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Integration Test</title>
+    <script type="module">
+        import { createAIGameEngine } from './src/aiGameEngine.js';
+        
+        console.log('Testing AI Game Engine Integration...');
+        
+        const engine = createAIGameEngine();
+        
+        // Test 1: Set single-player mode
+        engine.setGameMode('singleplayer', 'medium');
+        console.log('Game mode:', engine.getGameMode());
+        
+        // Test 2: Make human move
+        engine.makeMove(4);
+        console.log('Human moved to center (4)');
+        
+        // Test 3: Check if AI will move (should happen after timeout)
+        setTimeout(() => {
+            const state = engine.getState();
+            console.log('After AI turn:', state);
+            console.log('Board:', state.board);
+            console.log('O moves:', state.board.filter(cell => cell === 'O').length);
+        }, 1000);
+    </script>
+</head>
+<body>
+    <h1>AI Integration Test</h1>
+    <p>Check browser console for test results.</p>
+</body>
+</html>
