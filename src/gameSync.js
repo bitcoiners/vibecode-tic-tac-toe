@@ -47,10 +47,19 @@ export default function createGameSync(roomId, ioDependency) {
   const socket = io('/', {
     query: { roomId },
     transports: ['websocket', 'polling'],
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
   });
   
   // Store local game engine reference for state synchronization
   let localGameEngine = null;
+  
+  // Track reconnection state
+  let reconnectionAttempts = 0;
+  let isReconnecting = false;
+  let lastDisconnectReason = null;
   
   // ========== EVENT HANDLERS ==========
   // Listen for remote game state updates
@@ -67,6 +76,41 @@ export default function createGameSync(roomId, ioDependency) {
     }
   });
   
+  // Reconnection event handlers
+  socket.on('reconnect_attempt', (attemptNumber) => {
+    reconnectionAttempts = attemptNumber;
+    isReconnecting = true;
+    console.log(`Reconnection attempt ${attemptNumber}`);
+  });
+  
+  socket.on('reconnect', () => {
+    isReconnecting = false;
+    reconnectionAttempts = 0;
+    console.log('Reconnected successfully');
+  });
+  
+  socket.on('reconnect_error', (error) => {
+    console.error('Reconnection error:', error);
+  });
+  
+  socket.on('reconnect_failed', () => {
+    isReconnecting = false;
+    console.error('Reconnection failed after all attempts');
+  });
+  
+  socket.on('disconnect', (reason) => {
+    lastDisconnectReason = reason;
+    isReconnecting = false;
+    
+    if (reason === 'io server disconnect') {
+      // Server initiated disconnect, don't reconnect
+      console.log('Server disconnected us');
+    } else {
+      // Unexpected disconnect, will attempt reconnection
+      console.log('Unexpected disconnect, will reconnect');
+    }
+  });
+  
   // ========== PUBLIC API ==========
   return {
     // Connection Management
@@ -77,6 +121,14 @@ export default function createGameSync(roomId, ioDependency) {
     },
     
     getIsConnected: () => socket.connected,
+    
+    // Reconnection Status
+    getReconnectionStatus: () => ({
+      isReconnecting,
+      reconnectionAttempts,
+      lastDisconnectReason,
+      maxReconnectionAttempts: 5
+    }),
     
     // State Synchronization
     broadcastState: (state) => {
