@@ -12,7 +12,7 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "dev": "PORT=3001 node src/server.js",
-    "start": "PORT=3000 node src/server.js",
+    "start": "node src/server.js",
     "build": "echo 'No build step needed - PWA ready!'"
   },  
   "repository": {
