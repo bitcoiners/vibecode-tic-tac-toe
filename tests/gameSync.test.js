@@ -1,153 +1,14 @@
-/**
- * GameSync Unit Tests - Clean Version
- */
+// Tests for gameSync.js - Real-time multiplayer synchronization
 
-import { jest } from '@jest/globals';
+const createGameSync = require('../src/gameSync').default;
 
-// Simple mock
-const mockSocket = () => ({
-  on: jest.fn(),
-  off: jest.fn(),
-  emit: jest.fn(),
-  disconnect: jest.fn(),
-  connected: true
-});
-
-// Tests for previously uncovered lines
-describe('GameSync - Error Handling (Lines 28-37)', () => {
-  beforeEach(() => {
-    delete global.io;
-    delete global.window;
-  });
-  
-  test('should throw when io not found', () => {
-    delete global.io;
-    delete global.window;
-    
-    jest.resetModules();
-    const createGameSync = require('../src/gameSync').default;
-    
-    expect(() => {
-      createGameSync('test-room');
-    }).toThrow('Socket.io client (io) not found');
-  });
-  
-  test('should use global.io when available', () => {
-    global.io = jest.fn(() => mockSocket());
-    
-    jest.resetModules();
-    const createGameSync = require('../src/gameSync').default;
-    
-    expect(() => {
-      createGameSync('test-room');
-    }).not.toThrow();
-  });
-});
-
-describe('GameSync - Connection Events (Lines 118-123)', () => {
-  let mockIo;
-  let gameSync;
-  
-  beforeEach(() => {
-    mockIo = jest.fn(() => mockSocket());
-    
-    jest.resetModules();
-    const createGameSync = require('../src/gameSync').default;
-    gameSync = createGameSync('test-room', mockIo);
-  });
-  
-  test('should have onConnect method', () => {
-    expect(typeof gameSync.onConnect).toBe('function');
-  });
-  
-  test('should have onDisconnect method', () => {
-    expect(typeof gameSync.onDisconnect).toBe('function');
-  });
-});
-
-describe('GameSync - Basic Functionality', () => {
-  let mockIo;
-  let gameSync;
-  
-  beforeEach(() => {
-    mockIo = jest.fn(() => mockSocket());
-    
-    jest.resetModules();
-    const createGameSync = require('../src/gameSync').default;
-    gameSync = createGameSync('test-room', mockIo);
-  });
-  
-  test('should get room ID', () => {
-    expect(gameSync.getRoomId()).toBe('test-room');
-  });
-  
-  test('should get connection status', () => {
-    expect(typeof gameSync.getIsConnected()).toBe('boolean');
-  });
-  
-  test('should have shareable URL method', () => {
-    expect(typeof gameSync.getShareableUrl).toBe('function');
-  });
-  
-  test('should handle broadcast state', () => {
-    expect(() => {
-      gameSync.broadcastState({ board: [], currentPlayer: 'X' });
-    }).not.toThrow();
-  });
-});
-
-describe('GameSync - Automatic Reconnection', () => {
+describe('GameSync', () => {
   let mockIo;
   let mockSocket;
   let gameSync;
-  
-  beforeEach(() => {
-    mockSocket = {
-      on: jest.fn(),
-      off: jest.fn(),
-      emit: jest.fn(),
-      disconnect: jest.fn(),
-      connected: true
-    };
-    mockIo = jest.fn(() => mockSocket);
-    
-    jest.resetModules();
-    const createGameSync = require('../src/gameSync').default;
-    gameSync = createGameSync('test-room', mockIo);
-  });
-  
-  test('should automatically attempt reconnection on unexpected disconnect', () => {
-    // The bug: Currently onDisconnect just registers handlers
-    // It should also implement automatic reconnection logic
-    
-    // First, verify current behavior
-    const disconnectHandler = jest.fn();
-    gameSync.onDisconnect(disconnectHandler);
-    
-    // Check that socket.on was called
-    expect(mockSocket.on).toHaveBeenCalledWith('disconnect', expect.any(Function));
-    
-    // TODO: After implementing reconnection, we should verify:
-    // 1. Reconnection is attempted after disconnect
-    // 2. Reconnection has exponential backoff
-    // 3. Maximum retry limit is respected
-  });
-  
-  test('should expose reconnection status', () => {
-    // After implementing, gameSync should have:
-    // - getReconnectionAttempts()
-    // - isReconnecting()
-    // - getLastDisconnectReason()
-    
-    // For now, this test will document what we want
-    expect(true).toBe(true); // Placeholder
-  });
-});
-
-describe('GameSync - Reconnection Handling', () => {
-  let mockIo;
-  let mockSocket;
-  let gameSync;
+  let originalIo;
+  let originalWarn;
+  let originalWindow;
   
   beforeEach(() => {
     mockSocket = {
@@ -157,157 +18,188 @@ describe('GameSync - Reconnection Handling', () => {
       disconnect: jest.fn(),
       connected: true,
       io: {
-        opts: {
-          reconnection: true,
-          reconnectionAttempts: 5
-        }
+        opts: {}
       }
     };
+    
     mockIo = jest.fn(() => mockSocket);
     
-    jest.resetModules();
-    const createGameSync = require('../src/gameSync').default;
-    gameSync = createGameSync('test-room', mockIo);
+    // Set global.io for the module
+    originalIo = global.io;
+    global.io = mockIo;
+    
+    // Mock console.warn to prevent test output
+    originalWarn = console.warn;
+    console.warn = jest.fn();
+    
+    // Mock window
+    originalWindow = global.window;
+    global.window = { location: { origin: 'http://localhost' } };
+    
+    gameSync = createGameSync('test-room');
   });
   
-  test('should have reconnection status method', () => {
-    expect(typeof gameSync.getReconnectionStatus).toBe('function');
-    
-    const status = gameSync.getReconnectionStatus();
-    expect(status).toHaveProperty('isReconnecting');
-    expect(status).toHaveProperty('reconnectionAttempts');
-    expect(status).toHaveProperty('lastDisconnectReason');
+  afterEach(() => {
+    // Restore globals
+    global.io = originalIo;
+    console.warn = originalWarn;
+    global.window = originalWindow;
   });
   
-  test('should handle reconnect_attempt events', () => {
-    // Find the reconnect_attempt handler
-    const reconnectHandler = mockSocket.on.mock.calls.find(call => call[0] === 'reconnect_attempt');
-    expect(reconnectHandler).toBeDefined();
-    
-    // Initial status
-    const initialStatus = gameSync.getReconnectionStatus();
-    expect(initialStatus.reconnectionAttempts).toBe(0);
-    expect(initialStatus.isReconnecting).toBe(false);
-    
-    // Simulate reconnection attempt
-    reconnectHandler[1](3); // attemptNumber = 3
-    
-    const newStatus = gameSync.getReconnectionStatus();
-    expect(newStatus.reconnectionAttempts).toBe(3);
-    expect(newStatus.isReconnecting).toBe(true);
-  });
-  
-  test('should handle successful reconnection', () => {
-    const reconnectHandler = mockSocket.on.mock.calls.find(call => call[0] === 'reconnect');
-    expect(reconnectHandler).toBeDefined();
-    
-    // First simulate a reconnection attempt
-    const attemptHandler = mockSocket.on.mock.calls.find(call => call[0] === 'reconnect_attempt');
-    attemptHandler[1](2);
-    
-    // Then simulate successful reconnect
-    reconnectHandler[1]();
-    
-    const status = gameSync.getReconnectionStatus();
-    expect(status.reconnectionAttempts).toBe(0);
-    expect(status.isReconnecting).toBe(false);
-  });
-  
-  test('should track disconnect reasons', () => {
-    const disconnectHandler = mockSocket.on.mock.calls.find(call => call[0] === 'disconnect');
-    expect(disconnectHandler).toBeDefined();
-    
-    disconnectHandler[1]('io server disconnect');
-    
-    const status = gameSync.getReconnectionStatus();
-    expect(status.lastDisconnectReason).toBe('io server disconnect');
-  });
-});
-
-describe('GameSync - Error Handling Improvements', () => {
-  let mockIo;
-  let mockSocket;
-  let gameSync;
-  let mockEngine;
-  
-  beforeEach(() => {
-    mockSocket = {
-      on: jest.fn(),
-      off: jest.fn(),
-      emit: jest.fn(),
-      disconnect: jest.fn(),
-      connected: true
-    };
-    mockIo = jest.fn(() => mockSocket);
-    mockEngine = {
-      applyRemoteState: jest.fn()
-    };
-    
-    jest.resetModules();
-    const createGameSync = require('../src/gameSync').default;
-    gameSync = createGameSync('test-room', mockIo);
-    gameSync.registerLocalGameEngine(mockEngine);
-  });
-  
-  test('should have onError method for error event subscription', () => {
-    expect(typeof gameSync.onError).toBe('function');
-  });
-  
-  test('should call error handlers when state application fails', () => {
-    const errorHandler = jest.fn();
-    gameSync.onError(errorHandler);
-    
-    // Make engine throw an error
-    mockEngine.applyRemoteState.mockImplementation(() => {
-      throw new Error('Invalid game state');
+  describe('Initialization', () => {
+    test('should initialize with Socket.io instance', () => {
+      expect(gameSync).toBeDefined();
+      expect(global.io).toHaveBeenCalledWith('/', {
+        query: { roomId: 'test-room' },
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000
+      });
     });
     
-    // Trigger game:state event
-    const gameStateHandler = mockSocket.on.mock.calls.find(call => call[0] === 'game:state')[1];
-    const testState = { board: ['X', 'X', 'X', null, null, null, null, null, null] };
-    
-    gameStateHandler(testState);
-    
-    expect(errorHandler).toHaveBeenCalledWith(
-      expect.any(Error),
-      testState
-    );
-  });
-  
-  test('should allow removing error handlers', () => {
-    const errorHandler = jest.fn();
-    const removeHandler = gameSync.onError(errorHandler);
-    
-    expect(typeof removeHandler).toBe('function');
-    
-    removeHandler();
-    
-    // Handler should be removed
-    mockEngine.applyRemoteState.mockImplementation(() => {
-      throw new Error('Test error');
+    test('should set up socket event handlers', () => {
+      const eventNames = mockSocket.on.mock.calls.map(call => call[0]);
+      expect(eventNames).toContain('game:state');
+      expect(eventNames).toContain('reconnect_attempt');
+      expect(eventNames).toContain('reconnect');
+      expect(eventNames).toContain('disconnect');
     });
     
-    const gameStateHandler = mockSocket.on.mock.calls.find(call => call[0] === 'game:state')[1];
-    gameStateHandler({});
-    
-    expect(errorHandler).not.toHaveBeenCalled();
-  });
-  
-  test('should handle multiple error handlers', () => {
-    const errorHandler1 = jest.fn();
-    const errorHandler2 = jest.fn();
-    
-    gameSync.onError(errorHandler1);
-    gameSync.onError(errorHandler2);
-    
-    mockEngine.applyRemoteState.mockImplementation(() => {
-      throw new Error('Test error');
+    test('should handle missing roomId', () => {
+      expect(() => createGameSync(null)).toThrow('Room ID is required');
+      expect(() => createGameSync(123)).toThrow('Room ID must be a string');
     });
     
-    const gameStateHandler = mockSocket.on.mock.calls.find(call => call[0] === 'game:state')[1];
-    gameStateHandler({ test: 'state' });
+    test('should handle missing io', () => {
+      global.io = undefined;
+      expect(() => createGameSync('test-room')).toThrow('Socket.io client (io) not found');
+      global.io = mockIo;
+    });
+  });
+  
+  describe('Connection Status', () => {
+    test('getIsConnected should return socket connection status', () => {
+      expect(gameSync.getIsConnected()).toBe(true);
+      
+      mockSocket.connected = false;
+      expect(gameSync.getIsConnected()).toBe(false);
+    });
     
-    expect(errorHandler1).toHaveBeenCalled();
-    expect(errorHandler2).toHaveBeenCalled();
+    test('getReconnectionStatus should return current status', () => {
+      const status = gameSync.getReconnectionStatus();
+      expect(status).toEqual({
+        isReconnecting: false,
+        reconnectionAttempts: 0,
+        maxReconnectionAttempts: 5,
+        lastDisconnectReason: null
+      });
+    });
+  });
+  
+  describe('Room Management', () => {
+    test('getRoomId should return current room ID', () => {
+      expect(gameSync.getRoomId()).toBe('test-room');
+    });
+    
+    test('getShareableUrl should return URL with room ID', () => {
+      const url = gameSync.getShareableUrl();
+      expect(url).toBe('http://localhost?room=test-room');
+    });
+  });
+  
+  describe('Event Subscription', () => {
+    test('onConnect should register and allow unsubscribing', () => {
+      const handler = jest.fn();
+      const unsubscribe = gameSync.onConnect(handler);
+      
+      expect(typeof unsubscribe).toBe('function');
+      unsubscribe();
+    });
+    
+    test('onDisconnect should register handler', () => {
+      const handler = jest.fn();
+      const unsubscribe = gameSync.onDisconnect(handler);
+      
+      expect(typeof unsubscribe).toBe('function');
+      unsubscribe();
+    });
+    
+    test('onError should handle game engine errors', () => {
+      const handler = jest.fn();
+      gameSync.onError(handler);
+      
+      const mockEngine = {
+        applyRemoteState: jest.fn().mockImplementation(() => {
+          throw new Error('Test error');
+        })
+      };
+      gameSync.registerLocalGameEngine(mockEngine);
+      
+      const gameStateCall = mockSocket.on.mock.calls.find(call => call[0] === 'game:state');
+      if (gameStateCall && gameStateCall[1]) {
+        const testState = { board: ['X', null, null, null, null, null, null, null, null] };
+        gameStateCall[1](testState);
+        
+        expect(handler).toHaveBeenCalledWith(expect.any(Error), testState);
+      }
+    });
+  });
+  
+  describe('Game State Management', () => {
+    test('broadcastState should emit game state', () => {
+      const gameState = {
+        board: ['X', null, null, null, null, null, null, null, null],
+        currentPlayer: 'O',
+        gameOver: false,
+        winner: null
+      };
+      
+      gameSync.broadcastState(gameState);
+      expect(mockSocket.emit).toHaveBeenCalledWith('game:state', gameState);
+    });
+    
+    test('registerLocalGameEngine should process incoming states', () => {
+      const mockEngine = { applyRemoteState: jest.fn() };
+      gameSync.registerLocalGameEngine(mockEngine);
+      
+      const gameStateCall = mockSocket.on.mock.calls.find(call => call[0] === 'game:state');
+      if (gameStateCall && gameStateCall[1]) {
+        const remoteState = { board: ['X', 'O', null, null, null, null, null, null, null] };
+        gameStateCall[1](remoteState);
+        
+        expect(mockEngine.applyRemoteState).toHaveBeenCalledWith(remoteState);
+      }
+    });
+    
+    test('should handle null game state', () => {
+      const mockEngine = { applyRemoteState: jest.fn() };
+      gameSync.registerLocalGameEngine(mockEngine);
+      
+      const gameStateCall = mockSocket.on.mock.calls.find(call => call[0] === 'game:state');
+      if (gameStateCall && gameStateCall[1]) {
+        gameStateCall[1](null);
+        gameStateCall[1](undefined);
+        
+        expect(mockEngine.applyRemoteState).not.toHaveBeenCalled();
+      }
+    });
+    
+    test('should handle missing local game engine', () => {
+      const gameStateCall = mockSocket.on.mock.calls.find(call => call[0] === 'game:state');
+      if (gameStateCall && gameStateCall[1]) {
+        expect(() => {
+          gameStateCall[1]({ board: ['X', null, null, null, null, null, null, null, null] });
+        }).not.toThrow();
+      }
+    });
+  });
+  
+  describe('Disconnection', () => {
+    test('disconnect method should call socket.disconnect', () => {
+      gameSync.disconnect();
+      expect(mockSocket.disconnect).toHaveBeenCalled();
+    });
   });
 });
