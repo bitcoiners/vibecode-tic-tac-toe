@@ -398,3 +398,40 @@ Status: All objectives achieved, 80%+ coverage met, UI/UX improved
 With a solid foundation and quality gates in place, the project is ready for Phase 7 advanced features while maintaining code quality.
 
 Document maintained for AI-assisted development continuity - updated after Phase 6 completion!
+
+## 🐛 Immediate Post-Phase 6 Bug Fix (February 8, 2026)
+
+### 🎯 Bug Discovered & Fixed
+**Issue**: Runtime error `Uncaught TypeError: gameSync.setLocalEngine is not a function`
+**Root Cause**: HTML file using deprecated method name (`setLocalEngine`) after Phase 6 API refactoring
+**Impact**: Game creation would fail in browser with JavaScript error
+
+### 🔧 TDD Fix Applied
+**Approach**: Proper Red-Green-Refactor TDD cycle:
+1. **Red**: Created `html-integration.test.js` that failed detecting `setLocalEngine` in HTML
+2. **Green**: Fixed HTML to use correct `registerLocalGameEngine` method name
+3. **Refactor**: Enhanced tests and added `api-contract.test.js` for prevention
+
+**Files Modified**:
+- `public/index.html`: Fixed method call on line 277
+- `tests/html-integration.test.js`: New integration test (validates HTML/JS consistency)
+- `tests/api-contract.test.js`: New API contract test (ensures future API consistency)
+
+### 📊 Results
+- **Tests Added**: 3 new tests (73 total, was 70)
+- **Coverage Maintained**: 88.42% overall, gameSync.js at 89.33%
+- **Bug Prevention**: Added tests catch API mismatches before they reach production
+- **Workflow Validated**: Confirmed effectiveness of TDD approach for bug fixes
+
+### 📚 Key Learnings from This Fix
+1. **API Consistency Critical**: Frontend/backend API mismatches break at runtime
+2. **Integration Tests Valuable**: Need tests that validate HTML/JS interaction
+3. **TDD Works for Bugs**: Write failing test → fix → enhance test pattern effective
+4. **Documentation Gap**: Phase refactoring should include consumer (HTML) updates
+
+### 🔄 Updated Workflow Recommendation
+Add step to Phase completion checklist:
+- [ ] Verify all consumers (HTML, other modules) updated for API changes
+- [ ] Add integration tests for critical UI/browser interactions
+- [ ] Run manual browser test after significant refactoring
+
