@@ -11,6 +11,47 @@ Live URL: https://vibecode-tic-tac-toe.onrender.com
 
 ## 🌟 Project Vision
 
+
+## 🤖 AI AGENT BRIEF: MANDATORY WORKFLOW CONTEXT
+**COPY THIS SECTION WHEN STARTING ANY NEW DEVELOPMENT TASK**
+
+### 🎯 CORE RULES (Non-Negotiable)
+1.  **GIT & COMMITS** (from `docs/GIT_WORKFLOW.md`):
+    - ✅ **Format:** `<type>: <description>`
+    - ✅ **Types:** `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `perf`, `ci`
+    - ✅ **Body:** Include detailed body with change rationale.
+    - ✅ **Example:** `feat: Add AI opponent with minimax algorithm`
+
+2.  **CODING STYLE** (from `docs/CODING_STANDARDS.md`):
+    - ✅ **Immutability First:** Prefer `const`, avoid mutation, use pure functions.
+    - ✅ **Project Structure:** Follow existing `src/`, `tests/`, `docs/` patterns.
+    - ✅ **Naming:** `camelCase` for variables/functions, `UPPER_SNAKE` for constants.
+    - ✅ **Functions:** Single responsibility, ≤3 parameters, descriptive names.
+
+3.  **TESTING & TDD** (from integrated `testing.md` rule):
+    - ✅ **Process:** Red (failing test) → Green (pass) → Refactor (improve).
+    - ✅ **Coverage:** **80% MINIMUM.** Verify with `npm run test:coverage`.
+    - ✅ **Gatekeeper:** All tests (`npm test`) must pass before any commit.
+
+4.  **WORKFLOW DISCIPLINE:**
+    - ✅ **One Step:** Provide single-step instructions. I will work systematically.
+    - ✅ **File Replacement:** Prefer creating new files over modifying in-place.
+    - ✅ **Verify & Commit:** Run tests after each change, commit with correct format.
+
+### 🔗 CONTEXT & REFERENCES
+- **Project Phase:** Phase 6 Complete, entering **Phase 7 (Advanced Features)**
+- **Live App:** https://vibecode-tic-tac-toe.onrender.com
+- **Test Status:** 73 tests passing, 88.42% coverage
+- **Detailed Docs:** `docs/GIT_WORKFLOW.md` | `docs/CODING_STANDARDS.md` | `docs/everything-claude-code-tips-integration-roadmap.md`
+
+### 🚀 STARTING A TASK
+When beginning work on: **"[STATE THE TASK HERE]"**
+1.  Acknowledge you have read this brief and will apply all rules above.
+2.  Outline your planned approach.
+3.  Proceed one step at a time.
+
+---
+*This brief is part of the Everything Claude Code integration. Updated: $(date +"%Y-%m-%d")*
 A live multiplayer Tic-Tac-Toe experience where two friends can instantly play together by sharing a single link. Designed specifically for mobile browsers with a beautiful, touch-friendly interface.
 
 Development Philosophy:
