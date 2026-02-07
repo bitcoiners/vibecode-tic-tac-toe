@@ -1,6 +1,5 @@
 // src/gameSync.js
 
-import io from 'socket.io-client';
 
 /**
  * GameSync - Network controller for real-time multiplayer state sync
