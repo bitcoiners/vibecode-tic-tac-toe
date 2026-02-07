@@ -88,7 +88,7 @@ function renderGrid(gridEl, state, onCellClick) {
     cell.addEventListener('click', (e) => {
       e.preventDefault();
       if (typeof onCellClick === 'function') onCellClick(i);
-    }, { passive: true });
+    });
 
     gridEl.appendChild(cell);
   }
