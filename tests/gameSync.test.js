@@ -223,3 +223,91 @@ describe('GameSync - Reconnection Handling', () => {
     expect(status.lastDisconnectReason).toBe('io server disconnect');
   });
 });
+
+describe('GameSync - Error Handling Improvements', () => {
+  let mockIo;
+  let mockSocket;
+  let gameSync;
+  let mockEngine;
+  
+  beforeEach(() => {
+    mockSocket = {
+      on: jest.fn(),
+      off: jest.fn(),
+      emit: jest.fn(),
+      disconnect: jest.fn(),
+      connected: true
+    };
+    mockIo = jest.fn(() => mockSocket);
+    mockEngine = {
+      applyRemoteState: jest.fn()
+    };
+    
+    jest.resetModules();
+    const createGameSync = require('../src/gameSync').default;
+    gameSync = createGameSync('test-room', mockIo);
+    gameSync.registerLocalGameEngine(mockEngine);
+  });
+  
+  test('should have onError method for error event subscription', () => {
+    expect(typeof gameSync.onError).toBe('function');
+  });
+  
+  test('should call error handlers when state application fails', () => {
+    const errorHandler = jest.fn();
+    gameSync.onError(errorHandler);
+    
+    // Make engine throw an error
+    mockEngine.applyRemoteState.mockImplementation(() => {
+      throw new Error('Invalid game state');
+    });
+    
+    // Trigger game:state event
+    const gameStateHandler = mockSocket.on.mock.calls.find(call => call[0] === 'game:state')[1];
+    const testState = { board: ['X', 'X', 'X', null, null, null, null, null, null] };
+    
+    gameStateHandler(testState);
+    
+    expect(errorHandler).toHaveBeenCalledWith(
+      expect.any(Error),
+      testState
+    );
+  });
+  
+  test('should allow removing error handlers', () => {
+    const errorHandler = jest.fn();
+    const removeHandler = gameSync.onError(errorHandler);
+    
+    expect(typeof removeHandler).toBe('function');
+    
+    removeHandler();
+    
+    // Handler should be removed
+    mockEngine.applyRemoteState.mockImplementation(() => {
+      throw new Error('Test error');
+    });
+    
+    const gameStateHandler = mockSocket.on.mock.calls.find(call => call[0] === 'game:state')[1];
+    gameStateHandler({});
+    
+    expect(errorHandler).not.toHaveBeenCalled();
+  });
+  
+  test('should handle multiple error handlers', () => {
+    const errorHandler1 = jest.fn();
+    const errorHandler2 = jest.fn();
+    
+    gameSync.onError(errorHandler1);
+    gameSync.onError(errorHandler2);
+    
+    mockEngine.applyRemoteState.mockImplementation(() => {
+      throw new Error('Test error');
+    });
+    
+    const gameStateHandler = mockSocket.on.mock.calls.find(call => call[0] === 'game:state')[1];
+    gameStateHandler({ test: 'state' });
+    
+    expect(errorHandler1).toHaveBeenCalled();
+    expect(errorHandler2).toHaveBeenCalled();
+  });
+});

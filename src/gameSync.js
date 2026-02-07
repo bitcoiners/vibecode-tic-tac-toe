@@ -56,6 +56,9 @@ export default function createGameSync(roomId, ioDependency) {
   // Store local game engine reference for state synchronization
   let localGameEngine = null;
   
+  // Error handlers
+  const errorHandlers = [];
+  
   // Track reconnection state
   let reconnectionAttempts = 0;
   let isReconnecting = false;
@@ -73,6 +76,8 @@ export default function createGameSync(roomId, ioDependency) {
       localGameEngine.applyRemoteState(remoteState);
     } catch (error) {
       console.warn('Failed to apply remote state:', error);
+      // Notify error handlers
+      errorHandlers.forEach(handler => handler(error, remoteState));
     }
   });
   
@@ -158,6 +163,15 @@ export default function createGameSync(roomId, ioDependency) {
       };
       
       return `${getCurrentOrigin()}?room=${encodeURIComponent(roomId)}`;
+    },
+    
+    // Error Handling
+    onError: (handler) => {
+      errorHandlers.push(handler);
+      return () => {
+        const index = errorHandlers.indexOf(handler);
+        if (index > -1) errorHandlers.splice(index, 1);
+      };
     },
     
     // Event Management
