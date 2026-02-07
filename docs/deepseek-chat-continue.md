@@ -183,12 +183,27 @@ The following text should be copied and given to GitHub Copilot Chat:
 
 ## 💡 Key Learnings
 
+### Development Learnings
 1. **TDD Excellence** - Writing tests first leads to cleaner APIs
 2. **Modular Design** - Separating concerns makes testing easier
 3. **AI Partnership** - Copilot excels at boilerplate; needs human direction
 4. **Progressive Enhancement** - Build core first, then add features
 5. **Mobile-First** - Touch optimization from the start is crucial
 
+### Documentation Learnings (NEW!)
+6. **Markdown Stability** - 4-space indented code blocks are more reliable than triple backticks
+7. **Formatting Simplicity** - Keep markdown simple to avoid parsing issues
+8. **Living Documentation** - Update docs as you learn, not just at the end
+9. **Context Preservation** - Good documentation enables better AI assistance
+10. **Iterative Refinement** - Documents improve with successive revisions
+
+### AI-Assisted Development Learnings
+11. **Clear Context** - Provide full project context in prompts
+12. **Specific Tasks** - Break down work into concrete, actionable items
+13. **Test Preservation** - Always emphasize maintaining existing tests
+14. **Plan First** - Ask AI to outline approach before implementation
+15. **Iterative Feedback** - Small, focused iterations work best with AI
+
 ---
 
-*Document maintained for AI-assisted development continuity*
+*Document maintained for AI-assisted development continuity - now with improved formatting resilience!*
