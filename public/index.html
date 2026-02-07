@@ -274,7 +274,7 @@
       gameClient = initGameClient(gameArea);
       
       // Integrate gameEngine with gameSync
-      gameSync.setLocalEngine({
+      gameSync.registerLocalGameEngine({
         getState: () => {
           const { getState } = require('./src/gameEngine.js');
           return getState();
