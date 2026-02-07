@@ -1,5 +1,5 @@
 // tests/gameEngine.test.js
-import { checkGameStatus, makeMove, getState, resetGame } from '../src/gameEngine.js';
+import { checkGameStatus, makeMove, getState, resetGame, applyRemoteState } from '../src/gameEngine.js';
 
 describe('GameEngine - checkGameStatus', () => {
   test('should detect a win on the top row for X', () => {
@@ -101,6 +101,100 @@ describe('GameEngine - State Management', () => {
     makeMove(5); // Should not work
     const boardAfter = [...getState().board];
     
-    expect(boardAfter).toEqual(boardBefore); // Board should not change
+    expect(JSON.stringify(boardBefore)).toEqual(JSON.stringify(boardAfter));
+  });
+});
+
+describe('GameEngine - Remote State Synchronization', () => {
+  beforeEach(() => {
+    resetGame();
+  });
+
+  test('applyRemoteState should replace local state with remote state', () => {
+    // Make some moves locally
+    makeMove(0);
+    makeMove(1);
+    
+    const remoteState = {
+      board: ['X', 'X', 'X', 'O', 'O', '', '', '', ''],
+      currentPlayer: 'O',
+      status: 'win',
+      winner: 'X'
+    };
+    
+    applyRemoteState(remoteState);
+    const state = getState();
+    
+    expect(state.board).toEqual(remoteState.board);
+    expect(state.currentPlayer).toBe('O');
+    expect(state.status).toBe('win');
+    expect(state.winner).toBe('X');
+  });
+
+  test('applyRemoteState should validate board length', () => {
+    const invalidState = {
+      board: ['X', 'X'], // Too short
+      currentPlayer: 'O',
+      status: 'playing',
+      winner: null
+    };
+    
+    const originalState = getState();
+    applyRemoteState(invalidState);
+    
+    // State should not change
+    expect(getState()).toEqual(originalState);
+  });
+
+  test('applyRemoteState should validate currentPlayer', () => {
+    const invalidState = {
+      board: ['', '', '', '', '', '', '', '', ''],
+      currentPlayer: 'Z', // Invalid
+      status: 'playing',
+      winner: null
+    };
+    
+    const originalState = getState();
+    applyRemoteState(invalidState);
+    
+    // State should not change
+    expect(getState()).toEqual(originalState);
+  });
+
+  test('applyRemoteState should validate status', () => {
+    const invalidState = {
+      board: ['', '', '', '', '', '', '', '', ''],
+      currentPlayer: 'X',
+      status: 'invalid', // Invalid status
+      winner: null
+    };
+    
+    const originalState = getState();
+    applyRemoteState(invalidState);
+    
+    // State should not change
+    expect(getState()).toEqual(originalState);
+  });
+
+  test('applyRemoteState should handle null or undefined input', () => {
+    const originalState = getState();
+    
+    applyRemoteState(null);
+    expect(getState()).toEqual(originalState);
+    
+    applyRemoteState(undefined);
+    expect(getState()).toEqual(originalState);
+  });
+
+  test('applyRemoteState should default missing winner to null', () => {
+    const remoteState = {
+      board: ['X', 'O', '', '', '', '', '', '', ''],
+      currentPlayer: 'X',
+      status: 'playing'
+      // No winner property
+    };
+    
+    applyRemoteState(remoteState);
+    expect(getState().winner).toBe(null);
   });
 });

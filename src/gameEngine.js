@@ -66,3 +66,19 @@ export function resetGame() {
     winner: null
   };
 }
+
+export function applyRemoteState(remoteState) {
+  // Validate remote state
+  if (!remoteState || typeof remoteState !== 'object') return;
+  if (!Array.isArray(remoteState.board) || remoteState.board.length !== 9) return;
+  if (!['X', 'O'].includes(remoteState.currentPlayer)) return;
+  if (!['playing', 'win', 'tie'].includes(remoteState.status)) return;
+
+  // Replace local state with remote state
+  gameState = {
+    board: [...remoteState.board],
+    currentPlayer: remoteState.currentPlayer,
+    status: remoteState.status,
+    winner: remoteState.winner || null
+  };
+}
