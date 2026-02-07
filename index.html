@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tic Tac Toe — Dev</title>
+  <style>
+    body { margin:0; height:100vh; display:flex; align-items:center; justify-content:center; background:#f0f3f5; }
+    #app { width: min(460px, 96vw); padding:12px; }
+  </style>
+</head>
+<body>
+  <main id="app"></main>
+
+  <script type="module">
+    import initGameClient from './src/gameClient.js';
+    // Mount into the #app element
+    initGameClient(document.getElementById('app'));
+  </script>
+</body>
+</html>
