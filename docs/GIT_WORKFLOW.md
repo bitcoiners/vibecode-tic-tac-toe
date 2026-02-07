@@ -2,152 +2,188 @@
 *Adapted from Everything Claude Code \`rules/common/git-workflow.md\`*
 
 **Integration Date:** $(date +"%Y-%m-%d")
-**Status:** Phase 1, Step 1 of Claude Code Integration Roadmap
+**Status:** Phase 1, Step 1 of Claude Code Integration Roadmap  
 **Source:** Everything Claude Code → \`rules/common/git-workflow.md\`
 
-## 📋 Core Principles
+## 📋 Core Principles (From Original)
 
 ### 1. Commit Message Format
-Follow the Conventional Commits specification exactly as defined in source:
-
 \`\`\`
 <type>: <description>
 
 <optional body>
 \`\`\`
 
-**Types from source:** \`feat\`, \`fix\`, \`refactor\`, \`docs\`, \`test\`, \`chore\`, \`perf\`, \`ci\`
+**Types:** feat, fix, refactor, docs, test, chore, perf, ci
 
-**Project-specific guidance:**
-- \`feat:\` Use for Phase 7 features (AI opponent, score tracking, etc.)
-- \`fix:\` Bug fixes discovered during testing
-- \`refactor:\` Code improvements without changing behavior
-- \`docs:\` Documentation updates (like this integration)
-- \`test:\` Adding or improving tests (TDD workflow)
-- \`chore:\` Build process, tooling, or configuration changes
-- \`perf:\` Performance improvements (if needed for game sync)
-- \`ci:\` CI/CD pipeline changes (Render.com deployment)
-
-**Examples for our project:**
-\`\`\`
-feat: Add AI opponent with minimax algorithm
-fix: Resolve socket reconnection race condition
-docs: Integrate git-workflow from Everything Claude Code
-test: Add HTML integration test for API consistency
-refactor: Improve gameSync error handling structure
-\`\`\`
-
-### 2. Pull Request Workflow (Adapted for Solo Development)
-**Even as a solo developer, follow PR discipline:**
-1. **Analyze full commit history** before creating PR
-2. **Use \`git diff main...HEAD\`** to review all changes in feature branch
-3. **Draft comprehensive PR summary** on GitHub including:
-   - What changed and why
-   - Testing performed (\`npm test\`, \`npm run test:coverage\`)
-   - Manual testing results
-   - Related to which Phase/feature
-4. **Include test plan with TODOs** for future improvements
-5. **Push with \`-u\` flag** for new branches: \`git push -u origin feature/ai-opponent\`
+### 2. Pull Request Workflow
+When creating PRs:
+1. Analyze full commit history (not just latest commit)
+2. Use \`git diff [base-branch]...HEAD\` to see all changes
+3. Draft comprehensive PR summary
+4. Include test plan with TODOs
+5. Push with \`-u\` flag if new branch
 
 ### 3. Feature Implementation Workflow
-**Adapted from source with our TDD integration:**
-1. **Plan First** (Enhanced for our project)
-   - Review existing implementation plan in \`docs/\`
-   - Identify dependencies (e.g., AI opponent needs gameEngine enhancements)
-   - Break into TDD-friendly chunks
-   - Document in \`docs/\` before coding
+1. **Plan First** - Create implementation plan
+2. **TDD Approach** - Write tests first (RED), implement (GREEN), refactor (IMPROVE)
+3. **Code Review** - Review code immediately after writing
+4. **Commit & Push** - Detailed commit messages following format
 
-2. **TDD Approach** (Already integrated from \`testing.md\`)
-   - **RED:** Write failing test for smallest unit of behavior
-   - **GREEN:** Implement minimal code to pass test
-   - **IMPROVE:** Refactor while keeping tests green
-   - **VERIFY:** Ensure 80%+ coverage with \`npm run test:coverage\`
+## 🛠️ Project Adaptation for Tic-Tac-Toe PWA
 
-3. **Code Review** (Self-review process)
-   - After each significant change, review your own code
-   - Check for: Code smells, test coverage, error handling
-   - Use checklist from \`docs/deepseek-chat-continue.md\`
-   - Address critical issues immediately
+### Agent Usage Adaptation
+Since we'\''re not using Claude Code IDE, we adapt agent concepts:
+
+| Original Agent | Our Adaptation |
+|----------------|----------------|
+| **planner agent** | Use \`docs/\` for planning: feature plans, integration roadmap |
+| **tdd-guide agent** | Follow TDD workflow from \`testing.md\`: RED→GREEN→IMPROVE |
+| **code-reviewer agent** | Self-review checklist in \`docs/deepseek-chat-continue.md\` |
+
+### Detailed PR Workflow (Solo Developer)
+1. **Before PR Creation:**
+   \`\`\`bash
+   # Analyze all changes vs main
+   git diff main...HEAD --stat
+   git diff main...HEAD --name-only
+   \`\`\`
+   
+2. **PR Summary Template:**
+   \`\`\`markdown
+   ## What Changed
+   [Brief description]
+   
+   ## Why This Change
+   [Context, issue, feature]
+   
+   ## Testing Performed
+   - [ ] \`npm test\` (73 tests passing)
+   - [ ] \`npm run test:coverage\` (88.42%+ coverage)
+   - [ ] Manual browser testing
+   - [ ] Multiplayer testing (if applicable)
+   
+   ## Test Plan with TODOs
+   - [ ] Future test improvements needed
+   - [ ] Edge cases to test later
+   - [ ] Integration test suggestions
+   
+   ## Screenshots (UI changes)
+   [If applicable]
+   \`\`\`
+
+3. **Branch Management:**
+   \`\`\`bash
+   # New feature branch
+   git checkout -b feature/ai-opponent
+   
+   # Push with upstream tracking
+   git push -u origin feature/ai-opponent
+   \`\`\`
+
+### Feature Implementation Workflow (Adapted)
+1. **Plan First**
+   - Document approach in relevant \`docs/\` file
+   - Identify dependencies in existing codebase
+   - Break into TDD-friendly units
+
+2. **TDD Approach** 
+   - RED: Write failing Jest test
+   - GREEN: Minimal implementation to pass
+   - IMPROVE: Refactor with confidence (tests protect)
+   - VERIFY: \`npm run test:coverage\` ensures 80%+
+
+3. **Code Review** (Self-Review)
+   - After each logical unit, review against:
+     - Error handling completeness
+     - Test coverage adequacy  
+     - Code clarity and documentation
+     - Security considerations (input validation, etc.)
 
 4. **Commit & Push**
-   - Write detailed commit messages following format above
-   - Ensure atomic commits (one logical change per commit)
-   - Push regularly to avoid large, unwieldy changesets
+   - Atomic commits with conventional format
+   - Descriptive commit bodies when needed
+   - Regular pushes to avoid large changesets
 
-## 🛠️ Practical Implementation for Tic-Tac-Toe PWA
+## 📝 Practical Examples
 
-### Branch Strategy for Phase 7:
-\`\`\`
-main (stable, deployed)
-├── feature/ai-opponent           # AI player implementation
-├── feature/score-tracking        # Win/loss statistics
-├── feature/player-avatars        # User customization
-├── docs/claude-code-integration  # Workflow improvements
-└── bugfix/                       # Any discovered issues
-\`\`\`
-
-### Workflow for Implementing AI Opponent:
+### Implementing AI Opponent Feature:
 \`\`\`bash
-# 1. Plan
-#    - Review gameEngine.js capabilities
-#    - Design minimax/algorithm approach
-#    - Create test plan
-
-# 2. Create feature branch
+# 1. Plan in docs/ai-opponent-plan.md
+# 2. Create branch
 git checkout -b feature/ai-opponent
 
-# 3. TDD Cycle
-#    test: Write test for AI making valid move
-#    feat: Implement random move AI (simplest)
-#    test: Add test for AI blocking
-#    feat: Implement defensive logic
-#    ... continue TDD cycles
+# 3. TDD cycles
+#    test: Write test for AI valid move
+#    feat: Implement random move logic
+#    test: Add test for AI difficulty levels  
+#    feat: Implement minimax algorithm
 
-# 4. Self-review
-#    - Run all tests: npm test
-#    - Check coverage: npm run test:coverage
-#    - Manual test in browser
-
+# 4. Self-review after each major component
 # 5. Commit with conventional format
-git commit -m "feat: Implement basic AI opponent with random moves"
+git commit -m "feat: Add minimax algorithm for AI opponent
 
-# 6. Push and create PR (for tracking)
+- Implement minimax with alpha-beta pruning
+- Add three difficulty levels (easy, medium, hard)
+- Update gameEngine to support AI player turns"
+
+# 6. Push and create PR
 git push -u origin feature/ai-opponent
-# Create PR on GitHub with comprehensive summary
 \`\`\`
 
-### Quality Gates (From source + our adaptations):
-- **Pre-commit:** All tests pass, commit message follows format
-- **Pre-PR:** Full diff reviewed, test plan documented
-- **Pre-merge:** 80%+ coverage, manual testing completed
+### Fixing a Bug:
+\`\`\`bash
+# 1. Create bugfix branch  
+git checkout -b bugfix/socket-reconnection
 
-## 📝 Integration with Existing Workflow
-### Connection to Already-Integrated \`testing.md\`:
-- Git workflow provides the **commit/PR discipline**
-- Testing rules provide the **quality standards** (80% coverage)
-- Together they form complete development workflow
+# 2. Write failing test reproducing issue
+# 3. Fix the issue
+# 4. Add regression test
 
-### Updates to Project Documentation:
-1. **CONTRIBUTING.md** should reference this git workflow
-2. **Phase 7 feature plans** should follow this process
-3. **Future commits** must use the conventional format
+# 5. Commit
+git commit -m "fix: Resolve socket reconnection race condition
 
-## 🔍 Verification & Success Metrics
-**Success Criteria for This Integration:**
-- [ ] Next 5 commits use correct conventional format
-- [ ] Next feature branch follows the workflow above
-- [ ] PR created on GitHub with comprehensive summary (even solo)
-- [ ] All quality gates pass before merge
+- Add mutex lock for reconnection state updates
+- Prevent multiple simultaneous reconnection attempts
+- Add test for reconnection race condition"
 
-## 📚 Next Steps in Integration Roadmap
-1. **Immediate:** Apply this workflow to next commit
-2. **Next:** Review \`coding-style.md\` for Phase 1 completion
-3. **Future:** Consider implementing git hooks for automated format validation
+# 6. Push and PR with detailed test plan
+\`\`\`
+
+## 🔍 Quality Gates & Verification
+
+**Pre-Commit:**
+- [ ] Commit message follows \`<type>: <description>\` format
+- [ ] All tests pass (\`npm test\`)
+- [ ] Atomic change (single logical unit)
+
+**Pre-PR:**
+- [ ] \`git diff main...HEAD\` reviewed
+- [ ] PR summary drafted with test plan
+- [ ] 80%+ coverage maintained
+
+**Pre-Merge:**
+- [ ] Manual testing completed
+- [ ] Documentation updated if needed
+- [ ] No console warnings/errors
+
+## 📚 Integration Status
+
+This workflow integrates with:
+- ✅ \`testing.md\` rule (80% coverage, TDD)
+- 🔄 \`coding-style.md\` (next in Phase 1)
+- 🔄 Agent concepts adapted for our toolchain
 
 ---
 *Part of Claude Code Integration - Phase 1: Foundational Rules*
 *See: [Integration Roadmap](everything-claude-code-tips-integration-roadmap.md)*
-*Previous Integration: [Testing Rules](docs/deepseek-chat-continue.md#phase-6-retrospective--key-learnings)*
+*Original: [git-workflow.md](https://github.com/affaan-m/everything-claude-code/blob/main/rules/common/git-workflow.md)*
 
-## 🧪 Integration Test
-This section added to test git workflow integration on 2026-02-07
+## 🧪 Enhanced Workflow Test
+Test commit following all enhanced workflow rules:
+1. ✅ Conventional commit format
+2. ✅ Agent concepts adapted
+3. ✅ PR workflow simulated
+4. ✅ git diff usage verification
+
+Test completed: $(date +"%Y-%m-%d %H:%M:%S")
