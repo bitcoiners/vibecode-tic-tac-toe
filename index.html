@@ -2,20 +2,331 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tic Tac Toe — Dev</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover" />
+  
+  <!-- PWA Configuration -->
+  <meta name="theme-color" content="#2c3e50" />
+  <meta name="description" content="A live, two-player Tic-Tac-Toe game. Create a room, share a link, and play instantly." />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tic Tac Toe" />
+  <link rel="manifest" href="/public/manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%232c3e50' width='192' height='192'/><text x='50%' y='50%' font-size='120' font-weight='bold' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>T</text></svg>" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%232c3e50' width='180' height='180'/><text x='50%' y='50%' font-size='110' font-weight='bold' fill='%23fff' text-anchor='middle' dominant-baseline='middle'>T</text></svg>" />
+  
+  <title>Tic Tac Toe — Live Multiplayer</title>
   <style>
-    body { margin:0; height:100vh; display:flex; align-items:center; justify-content:center; background:#f0f3f5; }
-    #app { width: min(460px, 96vw); padding:12px; }
+    * {
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #f0f3f5;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+    
+    #app {
+      width: 100%;
+      max-width: 500px;
+    }
+    
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+    }
+    
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ccc;
+    }
+    
+    .status-indicator.connected {
+      background: #0b5;
+    }
+    
+    .status-indicator.error {
+      background: #f66;
+    }
+    
+    .install-prompt {
+      background: #2c3e50;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .install-prompt button {
+      background: white;
+      color: #2c3e50;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    
+    .install-prompt button:hover {
+      background: #f0f3f5;
+    }
   </style>
 </head>
 <body>
-  <main id="app"></main>
-
+  <div id="app"></div>
+  
   <script type="module">
     import initGameClient from './src/gameClient.js';
-    // Mount into the #app element
-    initGameClient(document.getElementById('app'));
+    import createGameLobby from './src/gameLobby.js';
+    import createGameSync from './src/gameSync.js';
+    import { resetGame } from './src/gameEngine.js';
+
+    const appContainer = document.getElementById('app');
+    let currentMode = 'lobby'; // 'lobby' or 'game'
+    let gameSync = null;
+    let gameClient = null;
+    let gameLobby = null;
+
+    // ═══════════════════════════════════════════════════════════
+    // SERVICE WORKER REGISTRATION
+    // ═══════════════════════════════════════════════════════════
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/public/service-worker.js')
+        .then((reg) => console.log('[SW] Registered:', reg))
+        .catch((err) => console.warn('[SW] Registration failed:', err));
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // INSTALL PROMPT HANDLING
+    // ═══════════════════════════════════════════════════════════
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      showInstallPrompt();
+    });
+    
+    function showInstallPrompt() {
+      if (!deferredPrompt) return;
+      
+      const statusBar = document.querySelector('.status-bar');
+      if (!statusBar) return;
+      
+      const prompt = document.createElement('div');
+      prompt.className = 'install-prompt';
+      prompt.innerHTML = `
+        <span>⬇️ Add Tic Tac Toe to your home screen</span>
+        <button id="install-btn">Install</button>
+      `;
+      
+      statusBar.insertAdjacentElement('afterend', prompt);
+      
+      document.getElementById('install-btn').addEventListener('click', async () => {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        prompt.remove();
+      });
+      
+      deferredPrompt.addEventListener('cancel', () => {
+        deferredPrompt = null;
+        prompt.remove();
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // STATUS BAR MANAGEMENT
+    // ═══════════════════════════════════════════════════════════
+    function createStatusBar() {
+      const bar = document.createElement('div');
+      bar.className = 'status-bar';
+      
+      const connectionStatus = document.createElement('div');
+      connectionStatus.className = 'status-item';
+      connectionStatus.id = 'connection-status';
+      connectionStatus.innerHTML = '<span class="status-indicator">●</span><span>Offline</span>';
+      
+      const playerRole = document.createElement('div');
+      playerRole.className = 'status-item';
+      playerRole.id = 'player-role';
+      playerRole.textContent = '';
+      
+      bar.appendChild(connectionStatus);
+      bar.appendChild(playerRole);
+      
+      return bar;
+    }
+    
+    function updateStatusBar(isConnected, role) {
+      const statusEl = document.getElementById('connection-status');
+      const roleEl = document.getElementById('player-role');
+      
+      if (statusEl) {
+        const indicator = statusEl.querySelector('.status-indicator');
+        if (isConnected) {
+          indicator.className = 'status-indicator connected';
+          statusEl.innerHTML = '<span class="status-indicator connected">●</span><span>Connected</span>';
+        } else {
+          indicator.className = 'status-indicator error';
+          statusEl.innerHTML = '<span class="status-indicator error">●</span><span>Offline</span>';
+        }
+      }
+      
+      if (roleEl && role) {
+        const roleIcon = role === 'host' ? '👑' : '👤';
+        roleEl.textContent = `${roleIcon} ${role === 'host' ? 'Host' : 'Player'}`;
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // GAME LIFECYCLE
+    // ═══════════════════════════════════════════════════════════
+    function showLobby() {
+      currentMode = 'lobby';
+      appContainer.innerHTML = '';
+      
+      // Reset game state when returning to lobby
+      resetGame();
+      
+      // Clean up game components
+      if (gameClient && typeof gameClient.destroy === 'function') {
+        gameClient.destroy();
+        gameClient = null;
+      }
+      if (gameSync && typeof gameSync.disconnect === 'function') {
+        gameSync.disconnect();
+        gameSync = null;
+      }
+      
+      // Show lobby
+      const statusBar = createStatusBar();
+      appContainer.appendChild(statusBar);
+      
+      gameLobby = createGameLobby(appContainer);
+      gameLobby.showLobby();
+      
+      // Listen for game creation/joining
+      gameLobby.on('room:created', ({ roomId, role }) => {
+        showGame(roomId, role);
+      });
+      
+      gameLobby.on('room:joined', ({ roomId, role }) => {
+        showGame(roomId, role);
+      });
+      
+      showInstallPrompt();
+    }
+    
+    function showGame(roomId, playerRole) {
+      currentMode = 'game';
+      appContainer.innerHTML = '';
+      
+      // Reset game state
+      resetGame();
+      
+      // Create status bar
+      const statusBar = createStatusBar();
+      appContainer.appendChild(statusBar);
+      
+      // Create game sync
+      gameSync = createGameSync(roomId);
+      
+      // Create game client (UI)
+      const gameArea = document.createElement('div');
+      appContainer.appendChild(gameArea);
+      
+      gameClient = initGameClient(gameArea);
+      
+      // Integrate gameEngine with gameSync
+      gameSync.setLocalEngine({
+        getState: () => {
+          const { getState } = require('./src/gameEngine.js');
+          return getState();
+        },
+        applyRemoteState: (state) => {
+          const { applyRemoteState } = require('./src/gameEngine.js');
+          applyRemoteState(state);
+          if (gameClient && typeof gameClient.refresh === 'function') {
+            gameClient.refresh();
+          }
+        },
+      });
+      
+      // Update status bar
+      updateStatusBar(gameSync.getIsConnected(), playerRole);
+      
+      // Monitor connection status
+      const statusCheckInterval = setInterval(() => {
+        updateStatusBar(gameSync.getIsConnected(), playerRole);
+      }, 500);
+      
+      // Back to lobby button
+      const backBtn = document.createElement('button');
+      backBtn.textContent = '← Back to Lobby';
+      backBtn.style.cssText = 'padding: 12px; margin-top: 16px; width: 100%; background: #f66; border: none; border-radius: 6px; font-weight: 600; color: #300; cursor: pointer;';
+      appContainer.appendChild(backBtn);
+      
+      backBtn.addEventListener('click', () => {
+        clearInterval(statusCheckInterval);
+        showLobby();
+      });
+      
+      // Show shared room info if player can see it
+      if (playerRole === 'host' && gameLobby) {
+        const roomInfo = gameLobby.showGame(roomId, playerRole);
+        appContainer.insertBefore(roomInfo, gameArea);
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // INITIALIZATION
+    // ═══════════════════════════════════════════════════════════
+    if (gameLobby) {
+      const roomIdFromUrl = createGameLobby(document.createElement('div')).getRoomIdFromUrl();
+      if (roomIdFromUrl) {
+        // Auto-join room from URL
+        showGame(roomIdFromUrl, 'guest');
+      } else {
+        showLobby();
+      }
+    } else {
+      showLobby();
+    }
   </script>
 </body>
 </html>

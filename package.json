@@ -1,21 +1,25 @@
 {
   "name": "vibecode-tic-tac-toe",
   "version": "1.0.0",
+  "type": "module",
   "description": "A live, two-player Tic-Tac-Toe game designed for quick, fun sessions between friends. Players can instantly start a game by sharing a link and take turns directly from their mobile browsers—no downloads required.",
-  "main": "index.js",
+  "main": "server.js",
   "directories": {
     "doc": "docs",
     "test": "tests"
   },
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watchAll"
-  },
+    "test:watch": "jest --watchAll",
+    "dev": "PORT=3001 node src/server.js",
+    "start": "PORT=3000 node src/server.js",
+    "build": "echo 'No build step needed - PWA ready!'"
+  },  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bitcoiners/vibecode-tic-tac-toe.git"
   },
-  "keywords": [],
+  "keywords": ["games", "tic-tac-toe", "multiplayer", "pwa", "realtime"],
   "author": "",
   "license": "ISC",
   "bugs": {
@@ -32,6 +36,8 @@
     "testEnvironment": "jsdom"
   },
   "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3"
   }
 }

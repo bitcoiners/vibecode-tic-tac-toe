@@ -9,15 +9,22 @@ function injectStyles() {
   if (document.getElementById('tic-tac-toe-styles')) return;
   const css = `
   .tic-tac-toe { max-width: 480px; margin: 0 auto; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
-  .tic-tac-toe-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; }
-  .tic-tac-toe-status { font-size:1.1rem; font-weight:600; }
-  .tic-tac-toe-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; }
+  .tic-tac-toe-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; flex-wrap: wrap; }
+  .tic-tac-toe-status { font-size:1.1rem; font-weight:600; flex: 1; min-width: 200px; }
+  .tic-tac-toe-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; margin-bottom: 16px; }
   .tic-tac-toe-cell { background:#fff; border:2px solid #222; border-radius:8px; display:flex; align-items:center; justify-content:center; aspect-ratio:1/1; font-size:2.4rem; font-weight:700; color:#111; touch-action:manipulation; user-select:none; -webkit-tap-highlight-color: transparent; }
   .tic-tac-toe-cell:active { transform:scale(0.995); }
   .tic-tac-toe-cell.disabled { opacity:0.6; pointer-events:none; }
-  .tic-tac-toe-controls { display:flex; gap:8px; }
-  .tic-tac-toe-button { background:#0b5; border:none; padding:8px 12px; border-radius:8px; font-weight:600; color:#021; }
+  .tic-tac-toe-controls { display:flex; gap:8px; flex-wrap: wrap; }
+  .tic-tac-toe-button { background:#0b5; border:none; padding:8px 12px; border-radius:8px; font-weight:600; color:#021; cursor: pointer; transition: all 0.2s; }
+  .tic-tac-toe-button:hover { background: #09a; transform: translateY(-1px); }
   .tic-tac-toe-button.secondary { background:#f66; color:#300; }
+  .tic-tac-toe-button.secondary:hover { background: #e55; }
+  .tic-tac-toe-status-indicator { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #666; }
+  .tic-tac-toe-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
+  .tic-tac-toe-status-dot.online { background: #0b5; }
+  .tic-tac-toe-status-dot.offline { background: #f66; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
   @media (prefers-reduced-motion: no-preference) { .tic-tac-toe-cell { transition: transform .08s ease; } }
   `;
   const style = document.createElement('style');
