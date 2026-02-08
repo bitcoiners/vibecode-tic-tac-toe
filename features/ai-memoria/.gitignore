@@ -1,0 +1,6 @@
+
+# AI-Memoria session states (user data)
+session-states/
+
+# Backup files
+*.backup
