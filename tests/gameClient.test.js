@@ -77,7 +77,7 @@ describe('GameClient', () => {
   });
   
   test('should create game client with container', () => {
-    const createGameClient = require('../src/gameClient').default;
+    const createGameClient = require('../src/client/gameClient').default;
     
     const mockContainer = {
       innerHTML: '',
@@ -93,7 +93,7 @@ describe('GameClient', () => {
   });
   
   test('should return an object with methods', () => {
-    const createGameClient = require('../src/gameClient').default;
+    const createGameClient = require('../src/client/gameClient').default;
     
     const mockContainer = {
       innerHTML: '',
@@ -109,7 +109,7 @@ describe('GameClient', () => {
   });
   
   test('should handle basic initialization', () => {
-    const createGameClient = require('../src/gameClient').default;
+    const createGameClient = require('../src/client/gameClient').default;
     
     const mockContainer = {
       innerHTML: '',

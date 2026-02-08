@@ -32,7 +32,7 @@ try {
   
   // Extract gameSync.js coverage from the Istanbul format
   const gameSyncKey = Object.keys(coverageData).find(key => 
-    key.includes('gameSync.js') || key.endsWith('src/gameSync.js')
+    key.includes('gameSync.js') || key.endsWith('src/client/gameSync.js')
   );
   
   if (!gameSyncKey) {

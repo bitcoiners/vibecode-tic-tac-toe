@@ -1,5 +1,5 @@
 // tests/gameLobby.test.js
-import createGameLobby from '../src/gameLobby.js';
+import createGameLobby from '../src/client/gameLobby.js';
 
 describe('GameLobby - Module Initialization', () => {
   let container;

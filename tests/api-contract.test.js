@@ -15,7 +15,7 @@ describe('API Contract Tests', () => {
     }));
     
     // Import the module
-    createGameSync = require('../src/gameSync.js').default;
+    createGameSync = require('../src/client/gameSync.js').default;
   });
   
   test('gameSync should have registerLocalGameEngine method (not setLocalEngine)', () => {

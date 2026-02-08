@@ -10,9 +10,9 @@ const ASSETS_TO_CACHE = [
   '/index.html',
   '/manifest.json',
   '/src/gameEngine.js',
-  '/src/gameClient.js',
-  '/src/gameSync.js',
-  '/src/gameLobby.js',
+  '/src/client/gameClient.js',
+  '/src/client/gameSync.js',
+  '/src/client/gameLobby.js',
 ];
 
 // ═══════════════════════════════════════════════════════════
