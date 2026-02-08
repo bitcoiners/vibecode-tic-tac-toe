@@ -8,7 +8,7 @@ import {
   resetGame
 } from './engine/gameEngine.js';
 import { createAIOpponent } from './ai/aiOpponent.js';
-import { convert1DTo2D, convertMoveToIndex } from './boardUtils.js';
+import { convert1DTo2D, convertMoveToIndex } from './utils/boardUtils.js';
 
 let aiPlayer = null;
 let gameMode = 'multiplayer';

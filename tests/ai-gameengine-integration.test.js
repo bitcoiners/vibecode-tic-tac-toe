@@ -8,7 +8,7 @@ import {
   convert2DTo1D, 
   convertMoveToIndex,
   convertIndexToMove 
-} from '../src/boardUtils.js';
+} from '../src/utils/boardUtils.js';
 
 describe('AI + GameEngine Integration', () => {
   describe('Board Format Conversion', () => {
