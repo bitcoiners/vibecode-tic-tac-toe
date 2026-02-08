@@ -93,7 +93,7 @@
 8. [ ] Gather community feedback
 
 ### Success Criteria:
-- Can be installed via `npm install project-memory-system`
+- Can be installed via `npm install ai-memoria`
 - Works with multiple project types out of the box
 - Plugin system allows community extensions
 - Documentation is comprehensive and beginner-friendly

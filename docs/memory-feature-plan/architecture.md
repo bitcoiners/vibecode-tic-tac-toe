@@ -140,7 +140,7 @@ scripts/project-startup/
 
 ### Package Structure
 ```
-project-memory-system/
+ai-memoria/
 ├── src/
 │   ├── cli/                    # Command-line interface
 │   │   ├── commands/

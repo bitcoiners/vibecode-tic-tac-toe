@@ -118,12 +118,12 @@ Create a script that initializes new projects with:
 
 ## Long-term Vision: Standalone Memory System Tool
 
-### Goal: Extract into `project-memory-system` package
+### Goal: Extract into `ai-memoria` package
 Create a standalone NPM package that can be installed in any project:
 
 ```bash
 # Installation
-npm install --save-dev project-memory-system
+npm install --save-dev ai-memoria
 
 # Usage
 npx memory-system init           # Initialize in current project

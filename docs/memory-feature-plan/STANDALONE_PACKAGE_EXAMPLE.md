@@ -1,12 +1,12 @@
 # Standalone Package Example
 
-## Package: \`project-memory-system\`
+## Package: \`ai-memoria\`
 
 ### Installation:
 \`\`\`bash
-npm install --save-dev project-memory-system
+npm install --save-dev ai-memoria
 # or globally
-npm install -g project-memory-system
+npm install -g ai-memoria
 \`\`\`
 
 ### Basic Usage:
@@ -16,7 +16,7 @@ npm install -g project-memory-system
 npx memory-system init
 # Creates:
 # - .memory-system/ directory
-# - memory-system.config.js
+# - ai-memoria.config.js
 # - Initial knowledge base structure
 # - Git hooks for auto-extraction
 \`\`\`
@@ -50,7 +50,7 @@ npx memory-system sync --to github
 npx memory-system sync --from team-repo
 \`\`\`
 
-### Configuration Example (\`memory-system.config.js\`):
+### Configuration Example (\`ai-memoria.config.js\`):
 \`\`\`javascript
 module.exports = {
   // Core settings
@@ -86,9 +86,9 @@ module.exports = {
   
   // Plugin settings
   plugins: [
-    "@memory-system/git-extractor",
-    "@memory-system/chat-analyzer",
-    "@memory-system/ai-patterns"
+    "@ai-memoria/git-extractor",
+    "@ai-memoria/chat-analyzer",
+    "@ai-memoria/ai-patterns"
   ],
   
   // Template settings
@@ -104,10 +104,10 @@ module.exports = {
 
 ### Programmatic API Example:
 \`\`\`javascript
-const { MemorySystem } = require("project-memory-system");
+const { ai-memoria } = require("ai-memoria");
 
 // Initialize
-const memory = new MemorySystem({
+const memory = new ai-memoria({
   projectPath: "./my-project"
 });
 
