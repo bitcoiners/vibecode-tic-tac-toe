@@ -25,7 +25,7 @@ async function extractFromFile(filepath) {
     for (const pattern of patterns) {
       const safeName = basename(filepath).replace(/\.[^/.]+$/, "").replace(/[^a-z0-9]/gi, "-").toLowerCase();
       const timestamp = new Date().toISOString().split("T")[0];
-      const filename = `doc-${safeName}-${timestamp}.json`;
+      const filename = `doc-${safeName}-${timestamp}-${pattern.type}-${Date.now()}.json`;
       const savePath = join(__dirname, "..", "knowledge-base", "workflows", filename);
 
       await writeFile(savePath, JSON.stringify(pattern, null, 2));

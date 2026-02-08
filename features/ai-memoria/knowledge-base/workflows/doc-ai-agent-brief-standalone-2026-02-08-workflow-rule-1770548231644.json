@@ -1,0 +1,27 @@
+{
+  "id": "workflow-ai-agent-1770548231643",
+  "title": "AI Agent Interaction Patterns (Document-extracted)",
+  "type": "workflow-rule",
+  "category": "ai-interaction",
+  "tags": [
+    "ai",
+    "document-extracted",
+    "llm",
+    "prompt",
+    "interaction"
+  ],
+  "content": "Patterns for interacting with AI assistants and LLMs.",
+  "source": {
+    "type": "project-doc",
+    "location": "../../docs/AI_AGENT_BRIEF_STANDALONE.md",
+    "reference": "AI Agent section"
+  },
+  "maturity": "tested",
+  "patternDetails": {
+    "interactionTypes": [
+      "system prompts",
+      "user messages",
+      "assistant responses"
+    ]
+  }
+}
