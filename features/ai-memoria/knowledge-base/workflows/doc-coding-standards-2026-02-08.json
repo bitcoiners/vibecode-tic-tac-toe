@@ -1,0 +1,28 @@
+{
+  "id": "workflow-branch-naming-doc-1770546974081",
+  "title": "Git Branch Naming Convention (Document-extracted)",
+  "type": "workflow-rule",
+  "category": "git-workflow",
+  "tags": [
+    "git",
+    "document-extracted",
+    "branch",
+    "naming"
+  ],
+  "content": "Standard branch naming convention for feature development, bug fixes, and documentation.",
+  "source": {
+    "type": "project-doc",
+    "location": "../../docs/CODING_STANDARDS.md",
+    "reference": "Branch Strategy section"
+  },
+  "maturity": "proven",
+  "patternDetails": {
+    "formats": [
+      "feature/<name>",
+      "fix/<name>",
+      "docs/<name>",
+      "refactor/<name>",
+      "test/<name>"
+    ]
+  }
+}
