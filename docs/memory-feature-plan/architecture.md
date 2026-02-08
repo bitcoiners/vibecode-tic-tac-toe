@@ -105,3 +105,66 @@ integration:
     required: true
     format: "Based on: [source] - [specific tip/reference]"
 ```
+
+## Project Startup System
+
+### Purpose
+Bootstrap new projects with accumulated knowledge and best practices.
+
+### Components
+```
+scripts/project-startup/
+├── templates/                 # Project type templates
+│   ├── web-app/              # Full-stack web application
+│   ├── api-service/          # REST/GraphQL API service
+│   ├── cli-tool/             # Command-line tool
+│   ├── library/              # Reusable library/package
+│   └── documentation/        # Documentation project
+├── knowledge-injector/       # Embed relevant knowledge
+│   ├── selector.js           # Choose relevant patterns
+│   ├── injector.js           # Insert into project files
+│   └── validator.js          # Validate knowledge integration
+├── config-generator/         # Generate configuration files
+│   ├── package-json.js       # package.json with scripts
+│   ├── ci-cd-config.js       # GitHub Actions/GitLab CI
+│   ├── lint-config.js        # ESLint/Prettier configs
+│   └── test-config.js        # Jest/Mocha setup
+├── memory-system-setup/      # Set up memory system
+│   ├── init-memory.js        # Initialize memory directories
+│   ├── seed-knowledge.js     # Seed with relevant patterns
+│   └── configure-scripts.js  # Set up update scripts
+└── project-startup.js        # Main orchestration script
+```
+
+## Standalone Package Architecture
+
+### Package Structure
+```
+project-memory-system/
+├── src/
+│   ├── cli/                    # Command-line interface
+│   │   ├── commands/
+│   │   │   ├── init.js
+│   │   │   ├── extract.js
+│   │   │   ├── new-project.js
+│   │   │   ├── search.js
+│   │   │   └── sync.js
+│   │   └── index.js           # CLI entry point
+│   ├── core/                  # Core functionality
+│   │   ├── extraction/
+│   │   ├── storage/
+│   │   ├── knowledge-base/
+│   │   └── templates/
+│   ├── plugins/               # Plugin system
+│   │   ├── git-extractor/
+│   │   ├── chat-extractor/
+│   │   ├── workflow-extractor/
+│   │   └── external-sources/
+│   └── api/                   # Programmatic API
+│       └── index.js
+├── templates/                 # Project templates
+├── plugins/                   # Default plugins
+├── bin/                       # CLI binaries
+├── package.json
+└── README.md
+```

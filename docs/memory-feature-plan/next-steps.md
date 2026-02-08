@@ -108,3 +108,21 @@ mkdir schemas
 - Debugging with AI copilots
 - Learning new technologies with AI
 - Project planning with AI assistance
+
+## Project Startup Script Planning:
+
+### Project Types to Support:
+1. **Web Application** - React/Vue frontend + Node.js backend
+2. **API Service** - REST/GraphQL API with database
+3. **CLI Tool** - Command-line interface with argument parsing
+4. **Library/Package** - Reusable code package for distribution
+5. **Documentation Site** - Technical documentation project
+
+### Knowledge to Pre-Install:
+- Git workflow rules appropriate for project type
+- Testing strategies and coverage requirements
+- Code organization patterns
+- Deployment and CI/CD configurations
+- Security best practices
+- Performance optimization patterns
+- AI development patterns (from external sources)
