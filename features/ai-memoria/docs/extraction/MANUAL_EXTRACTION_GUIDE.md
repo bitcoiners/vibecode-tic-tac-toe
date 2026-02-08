@@ -142,3 +142,15 @@ Once manual extraction is mastered, we'll build:
 *Documented based on extracting first 2 patterns for ai-memoria*
 *Date: 2024-01-15*
 *Status: Tested and validated*
+
+## 💡 Pro Tip: Echo Command Technique
+
+When heredocs fail in markdown, use sequential echo commands:
+```bash
+# Instead of problematic heredoc
+echo '# Title' > file.md
+echo '' >> file.md
+echo "Content" >> file.md
+```
+
+**Pattern:** `safe-command-documentation.json`
