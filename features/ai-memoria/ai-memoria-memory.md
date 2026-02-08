@@ -237,3 +237,28 @@ PATTERN_END
 
 ---
 Last updated: 2026-02-08
+
+# 📚 LEARNING CATEGORIES
+
+## 🛠️ Technical Implementation
+(Tooling, commands, formatting issues - stays here)
+
+## 🔗 Integration Points
+(How this connects to parent project - summary goes to root)
+
+## 📊 Process & Workflow
+(Extraction methodology - stays here, patterns go to knowledge base)
+
+## 🎯 Pattern Quality
+(What makes good vs bad patterns - captured as patterns themselves)
+
+## 🎯 Pattern Extracted: Documentation Best Practice
+Converted development experience into reusable knowledge:
+
+**Pattern:** Safe Multi-line Command Formatting in Markdown
+**Type:** best-practice
+**Status:** Validated and applied to root project
+**Location:** knowledge-base/best-practices/markdown-command-formatting.json
+
+### Key Learning
+Development challenges → Identify patterns → Extract → Validate → Apply → Share

@@ -1,0 +1,60 @@
+{
+  "id": "best-practice-markdown-commands-001",
+  "title": "Safe Multi-line Command Formatting in Markdown",
+  "content": "Techniques for providing executable shell commands in markdown documentation without triggering premature code block termination or syntax errors.",
+  "type": "best-practice",
+  "category": "documentation",
+  "tags": ["markdown", "documentation", "shell", "commands", "formatting"],
+  "description": "Solutions for common markdown parsing issues when documenting multi-line shell commands with special characters.",
+  "problemSolved": "Markdown code blocks break prematurely when they contain triple backticks, indented markers, or special characters that interfere with parsing.",
+  "source": {
+    "type": "project-experience",
+    "location": "ai-memoria development",
+    "reference": "Pattern extraction command documentation"
+  },
+  "maturity": "tested",
+  "patternDetails": {
+    "techniques": [
+      {
+        "name": "Heredoc with Unique Delimiter",
+        "example": "cat > file.txt << 'UNIQUE_MARKER'\nContent with ``` backticks\nUNIQUE_MARKER",
+        "useCase": "Creating files with complex content"
+      },
+      {
+        "name": "Escaped Triple Backticks",
+        "example": "echo '\\`\\`\\`markdown' > file.md\necho 'Content' >> file.md\necho '\\`\\`\\`' >> file.md",
+        "useCase": "When you must show backticks in output"
+      },
+      {
+        "name": "printf Multi-line",
+        "example": "printf '%s\\n' \\\n  'Line 1' \\\n  '```code' \\\n  'Line 3' \\\n  > file.txt",
+        "useCase": "Precise control with special characters"
+      },
+      {
+        "name": "External Script Files",
+        "example": "curl -O https://example.com/script.sh\nchmod +x script.sh\n./script.sh",
+        "useCase": "Complex multi-step procedures"
+      }
+    ],
+    "rules": [
+      "Always test commands after providing them in documentation",
+      "Use unique delimiters (not just EOF) for heredocs",
+      "Escape backticks when they appear in command output",
+      "Validate JSON/structured data after creation commands",
+      "Consider providing downloadable scripts for complex procedures"
+    ]
+  },
+  "implementation": {
+    "steps": [
+      "Identify if command contains triple backticks or special characters",
+      "Choose appropriate formatting technique based on content",
+      "Test the command in isolation first",
+      "Provide validation step in documentation"
+    ]
+  },
+  "validation": "Commands execute without syntax errors when copy-pasted",
+  "relatedPatterns": ["documentation-standards", "cli-tool-documentation"],
+  "author": "ai-memoria-system",
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-15"
+}
