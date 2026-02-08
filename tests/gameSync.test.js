@@ -1,6 +1,6 @@
 // Tests for gameSync.js - Real-time multiplayer synchronization
 
-const createGameSync = require('../src/gameSync').default;
+const createGameSync = require('../src/client/gameSync').default;
 
 describe('GameSync', () => {
   let mockIo;

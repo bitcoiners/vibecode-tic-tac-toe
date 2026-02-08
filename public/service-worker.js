@@ -11,7 +11,7 @@ const ASSETS_TO_CACHE = [
   '/manifest.json',
   '/src/gameEngine.js',
   '/src/client/gameClient.js',
-  '/src/gameSync.js',
+  '/src/client/gameSync.js',
   '/src/client/gameLobby.js',
 ];
 

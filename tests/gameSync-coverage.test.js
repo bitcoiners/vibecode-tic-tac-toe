@@ -1,6 +1,6 @@
 // Focused coverage tests for gameSync.js
 
-const createGameSync = require('../src/gameSync').default;
+const createGameSync = require('../src/client/gameSync').default;
 
 describe('GameSync - Coverage Focus', () => {
   let mockIo;
