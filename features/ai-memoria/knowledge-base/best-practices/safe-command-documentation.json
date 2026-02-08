@@ -1,0 +1,40 @@
+{
+  "id": "best-practice-safe-commands-001",
+  "title": "Safe Command Documentation with Multiple Echo Commands",
+  "content": "Technique for documenting shell commands in markdown by using sequential echo commands instead of heredocs to avoid premature code block termination.",
+  "type": "best-practice",
+  "category": "documentation",
+  "tags": ["markdown", "documentation", "shell", "echo", "formatting", "ai-assisted"],
+  "description": "When heredocs fail due to markdown parsing issues, use multiple echo commands to build files line by line.",
+  "problemSolved": "Markdown code blocks break when heredoc content contains special characters (triple backticks, indented markers) that interfere with parsing.",
+  "source": {
+    "type": "project-experience",
+    "location": "ai-memoria development",
+    "reference": "Creating documentation with complex content"
+  },
+  "maturity": "tested",
+  "patternDetails": {
+    "technique": "Sequential echo commands",
+    "whenToUse": [
+      "When heredoc fails due to markdown parsing",
+      "When content contains triple backticks",
+      "When you need precise control over each line",
+      "When working with AI assistants that struggle with heredocs"
+    ]
+  },
+  "implementation": {
+    "steps": [
+      "Start with > to create/overwrite: echo \"first line\" > file.txt",
+      "Use >> for subsequent lines: echo \"second line\" >> file.txt",
+      "Escape special characters: echo \"Content with \\\\\`\\\\\`\\\\\`\" >> file.md",
+      "Add empty lines: echo \"\" >> file.md"
+    ]
+  },
+  "validation": "Commands execute without syntax errors and create the intended file content",
+  "relatedPatterns": [
+    "markdown-command-formatting"
+  ],
+  "author": "ai-memoria-system",
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-15"
+}

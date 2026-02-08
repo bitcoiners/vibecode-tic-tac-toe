@@ -55,3 +55,32 @@ Development challenges (markdown formatting issues) can themselves become valuab
 **Current Task:** Document the manual extraction process while fresh
 **Next:** Extract branch naming conventions pattern
 **Goal:** Complete Milestone 1 (all 7 tasks)
+
+---
+
+## 📝 DEVELOPMENT LEARNING: Safe Command Documentation
+
+**Problem:** Heredocs in markdown documentation often fail due to:
+- Triple backticks in content causing premature code block termination
+- AI assistants struggling with heredoc syntax
+- Markdown parsers getting confused by nested delimiters
+
+**Solution Discovered:** Use sequential echo commands:
+
+```bash
+# Instead of problematic heredoc:
+# cat > file.md << 'EOF'
+# Content with ``` backticks
+# EOF
+
+# Use echo commands:
+echo '# Title' > file.md
+echo '' >> file.md
+echo "Content with \`\`\` backticks" >> file.md
+```
+
+**Key Insight:** This technique emerged naturally during ai-memoria development when documenting the extraction process. The solution to our documentation problem itself became a pattern!
+
+**Extracted as:** `safe-command-documentation.json` (best-practice)
+
+**Applied in:** Creating this very documentation!
