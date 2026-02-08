@@ -66,3 +66,24 @@ scripts/memory-pipeline/
 │   └── update-index.js     # Update search
 └── pipeline-runner.js      # Orchestrate everything
 ```
+
+## Extraction Sources
+
+### 1. Project Activity Sources
+- **Git History**: Commit messages, PR descriptions, code changes
+- **Conversation Logs**: Chat history, meeting notes, decision records
+- **Code Changes**: Refactoring patterns, architecture decisions
+- **Test Results**: What worked, what failed, coverage patterns
+- **Documentation**: README updates, comments, API docs
+
+### 2. Workflow & Process Sources
+- **Workflow Documents**: `GIT_WORKFLOW.md`, `CODING_STANDARDS.md`, etc.
+- **Configuration Files**: `package.json` scripts, CI/CD configs, linter rules
+- **Template Files**: Project starters, code generators, document templates
+- **Validation Scripts**: Quality gates, test runners, build scripts
+
+### 3. Meta-Sources (Process about the process)
+- **How decisions were made** about workflows
+- **Evolution of standards** over time
+- **Team feedback** on what works/doesn't work
+- **Performance metrics** of different workflows

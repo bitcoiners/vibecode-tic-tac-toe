@@ -4,12 +4,19 @@
 **Goal**: Basic extraction and storage working
 
 ### Tasks:
-1. [ ] Define complete data schemas
+1. [ ] Define complete data schemas (including workflow rules)
 2. [ ] Create knowledge base directory structure
 3. [ ] Build simple git history extractor
-4. [ ] Create manual extraction template
-5. [ ] Test with current project data
-6. [ ] Document the extraction process
+4. [ ] Build workflow document extractor (GIT_WORKFLOW.md, CODING_STANDARDS.md, etc.)
+5. [ ] Create manual extraction template
+6. [ ] Test with current project data AND workflow documents
+7. [ ] Document the extraction process
+
+### Success Criteria:
+- Can manually create 5 knowledge entries from project learnings
+- Can extract 3 workflow rules from existing documents
+- Basic directory structure exists
+- Extraction template is usable for both learnings and workflows
 
 ### Success Criteria:
 - Can manually create 5 knowledge entries

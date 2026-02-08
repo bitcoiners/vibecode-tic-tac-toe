@@ -51,3 +51,33 @@ Create a persistent memory system that:
 - AI-assisted learning extraction
 - Cross-project pattern matching
 - Predictive suggestions
+
+## Scope: What Gets Captured
+
+### 1. Project-Specific Learnings
+- Code organization patterns
+- Testing strategies that worked
+- Architectural decisions and trade-offs
+- Problem-solving approaches
+- Performance optimizations
+
+### 2. Workflow Rules & Processes
+- Git workflows and commit conventions
+- Code review standards
+- Testing requirements and coverage rules
+- Documentation standards
+- CI/CD pipeline configurations
+- Team collaboration patterns
+- Quality gate definitions
+
+### 3. Tooling & Automation
+- Scripts that automate repetitive tasks
+- Development environment setups
+- Code generation templates
+- Monitoring and alerting configurations
+
+### 4. Best Practices & Anti-Patterns
+- What consistently works well
+- What to avoid and why
+- Common pitfalls and solutions
+- Security considerations

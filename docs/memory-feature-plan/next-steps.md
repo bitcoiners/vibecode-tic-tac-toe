@@ -76,3 +76,20 @@ cat next-steps.md
 mkdir schemas
 # ... continue with implementation
 ```
+
+## Workflow Documents to Include:
+
+### Existing workflow documents in this project:
+1. `GIT_WORKFLOW.md` - Git branching, commit conventions, PR workflows
+2. `CODING_STANDARDS.md` - Code style, structure, quality standards
+3. `AI_AGENT_BRIEF_STANDALONE.md` - AI interaction patterns
+4. `RULE_INTEGRATION_TEMPLATE.md` - Rule definition templates
+5. `TECHNICAL_BLUEPRINT.md` - Technical planning patterns
+6. `workflow-processes.md` - Development workflow processes
+
+### Types of workflow rules to extract:
+- **Mandatory Rules**: Must always be followed (e.g., test coverage > 80%)
+- **Recommended Practices**: Suggested but not required
+- **Decision Frameworks**: How to choose between alternatives
+- **Validation Checks**: Automated quality gates
+- **Process Flows**: Step-by-step workflows
