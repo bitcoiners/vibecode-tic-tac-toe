@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI-Memoria Knowledge Entry",
+  "description": "Unified schema for all types of captured knowledge: patterns, workflows, tooling, best practices, and anti-patterns.",
+  "type": "object",
+  "required": ["id", "title", "content", "type", "category", "tags"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this knowledge entry"
+    },
+    "title": {
+      "type": "string",
+      "description": "Clear, descriptive title (e.g., 'Conventional Commit Format', 'React State Pattern for Games')"
+    },
+    "content": {
+      "type": "object",
+      "description": "The core knowledge content, structured by type",
+      "properties": {
+        "problem": {
+          "type": "string",
+          "description": "What problem this solves (optional for workflow rules)"
+        },
+        "solution": {
+          "type": "string",
+          "description": "The pattern, rule, or solution"
+        },
+        "implementation": {
+          "type": "string",
+          "description": "How to implement (code/config examples)"
+        },
+        "whyValuable": {
+          "type": "string",
+          "description": "Why this is valuable/important"
+        },
+        "howToApply": {
+          "type": "string", 
+          "description": "How to apply to other projects/contexts"
+        }
+      },
+      "required": ["solution"]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["workflow-rule", "code-pattern", "tooling", "best-practice", "anti-pattern", "external-pattern"],
+      "description": "Type of knowledge entry"
+    },
+    "category": {
+      "type": "string",
+      "description": "Primary category (e.g., 'git', 'testing', 'react', 'ai-prompting')"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Search keywords (e.g., ['git', 'commit', 'workflow', 'automation'])"
+    },
+    "source": {
+      "type": "object",
+      "description": "Where this knowledge came from",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["project-doc", "git-history", "chat-log", "external-repo", "manual-entry"]
+        },
+        "reference": {
+          "type": "string",
+          "description": "Specific reference (e.g., 'GIT_WORKFLOW.md', 'everything-claude-code')"
+        },
+        "extractedDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["type", "reference"]
+    },
+    "validation": {
+      "type": "string",
+      "description": "How to validate this works (e.g., 'commitlint passes', 'tests run', 'linter passes')"
+    },
+    "applicableTo": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Project types this applies to (e.g., ['web-app', 'api-service', 'cli-tool'])"
+    },
+    "maturity": {
+      "type": "string",
+      "enum": ["experimental", "tested", "proven", "deprecated"],
+      "default": "tested"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
