@@ -6,9 +6,9 @@ import {
   getState, 
   makeMove as engineMakeMove, 
   resetGame
-} from './gameEngine.js';
-import { createAIOpponent } from './aiOpponent.js';
-import { convert1DTo2D, convertMoveToIndex } from './boardUtils.js';
+} from './engine/gameEngine.js';
+import { createAIOpponent } from './ai/aiOpponent.js';
+import { convert1DTo2D, convertMoveToIndex } from './utils/boardUtils.js';
 
 let aiPlayer = null;
 let gameMode = 'multiplayer';

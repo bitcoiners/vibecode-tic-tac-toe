@@ -1,5 +1,5 @@
 // tests/gameEngine.test.js
-import { checkGameStatus, makeMove, getState, resetGame, applyRemoteState } from '../src/gameEngine.js';
+import { checkGameStatus, makeMove, getState, resetGame, applyRemoteState } from '../src/engine/gameEngine.js';
 
 describe('GameEngine - checkGameStatus', () => {
   test('should detect a win on the top row for X', () => {

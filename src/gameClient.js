@@ -1,6 +1,6 @@
 // src/gameClient.js
 
-import { getState, makeMove, resetGame } from './gameEngine.js';
+import { getState, makeMove, resetGame } from './engine/gameEngine.js';
 
 // Simple Tic-Tac-Toe client (plain JS + CSS)
 // Exported API: initGameClient(containerOrSelector)

@@ -2,7 +2,7 @@
  * AI Opponent Tests - Comprehensive Coverage
  * IMPROVE Phase: Enhance test coverage to 80%+
  */
-import { createAIOpponent } from '../src/aiOpponent.js';
+import { createAIOpponent } from '../src/ai/aiOpponent.js';
 
 describe('AI Opponent', () => {
   // ========== CONSTRUCTOR TESTS ==========
