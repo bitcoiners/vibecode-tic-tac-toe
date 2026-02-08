@@ -2,7 +2,7 @@
  * AI + GameEngine Integration Tests
  */
 import { createAIGameEngine } from '../src/aiGameEngine.js';
-import { createAIOpponent } from '../src/aiOpponent.js';
+import { createAIOpponent } from '../src/ai/aiOpponent.js';
 import { 
   convert1DTo2D, 
   convert2DTo1D, 

@@ -7,7 +7,7 @@ import {
   makeMove as engineMakeMove, 
   resetGame
 } from './engine/gameEngine.js';
-import { createAIOpponent } from './aiOpponent.js';
+import { createAIOpponent } from './ai/aiOpponent.js';
 import { convert1DTo2D, convertMoveToIndex } from './boardUtils.js';
 
 let aiPlayer = null;
