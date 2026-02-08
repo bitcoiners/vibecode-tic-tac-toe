@@ -12,7 +12,7 @@ const ASSETS_TO_CACHE = [
   '/src/gameEngine.js',
   '/src/client/gameClient.js',
   '/src/gameSync.js',
-  '/src/gameLobby.js',
+  '/src/client/gameLobby.js',
 ];
 
 // ═══════════════════════════════════════════════════════════
