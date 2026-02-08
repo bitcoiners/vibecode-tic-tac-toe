@@ -141,3 +141,99 @@ ai-memoria/
 
 ---
 *Summary updated: $(date +"%Y-%m-%d %H:%M:%S")*
+
+## ✅ 2024-01-15: FIRST PATTERN EXTRACTED & VALIDATED!
+
+### 🎯 Pattern Details
+- **Pattern:** Semantic Commit Messages with Conventional Commits
+- **Type:** workflow-rule
+- **Category:** git-workflow
+- **Source:** docs/GIT_WORKFLOW.md
+- **Location:** knowledge-base/workflows/semantic-commits.json
+- **Validation:** ✅ PASSED
+
+### 📊 Milestone 1 Progress
+- ✅ Task 1: Define complete data schemas
+- ✅ Task 2: Create knowledge base directory structure
+- ✅ Task 3: Create manual extraction template
+- ⬜ Task 4: Build git history extractor
+- ⬜ Task 5: Build workflow document extractor
+- ⬜ Task 7: Document the extraction process
+
+### 🧠 Key Insights
+1. The schema validation works perfectly!
+2. Required fields: id, title, content, type, category, tags
+3. The manual extraction → JSON conversion process is validated
+4. Our first real knowledge unit is now stored and reusable
+
+### 🚀 Next Steps
+1. Extract branch naming conventions from same document
+2. Create extraction process documentation
+3. Start building automated extractors
+
+## 📝 TECHNICAL NOTE: Avoiding Markdown Block Breaks
+
+### Problem
+When providing multi-line shell commands in markdown, code blocks can break prematurely when they contain:
+1. Triple backticks within the command
+2. Indented code markers
+3. Special characters that interfere with markdown parsing
+
+### Solutions for Future Commands
+
+**Option 1: Use heredoc with different delimiter**
+```bash
+# Instead of 'EOF', use a unique delimiter
+cat > file.txt << 'END_COMMAND'
+Content with ``` backticks
+And multiple lines
+END_COMMAND
+```
+
+**Option 2: Escape triple backticks**
+```bash
+echo '\`\`\`markdown' > file.md
+echo 'Content here' >> file.md
+echo '\`\`\`' >> file.md
+```
+
+**Option 3: Use printf for multi-line**
+```bash
+printf '%s\n' \
+  'Line 1' \
+  'Line 2' \
+  '```code' \
+  'Line 4' \
+  > file.txt
+```
+
+**Option 4: Create script files**
+```bash
+# Provide download link or script
+curl -O https://example.com/script.sh
+chmod +x script.sh
+./script.sh
+```
+
+### Best Practice for ai-memoria Commands
+1. **For JSON files:** Use `cat > file.json << 'ENDJSON'` with unique delimiter
+2. **For templates:** Escape backticks or use different delimiter
+3. **For complex content:** Provide as separate downloadable content
+4. **Always test:** Validate JSON after creation
+
+### Example: Safe pattern template creation**
+```bash
+cat > template.md << 'PATTERN_END'
+# Title
+
+Content with code:
+``\`markdown
+code here
+``\`
+
+More content
+PATTERN_END
+```
+
+---
+Last updated: 2026-02-08
