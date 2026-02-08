@@ -1,0 +1,55 @@
+{
+  "id": "workflow-semantic-commits-001",
+  "title": "Semantic Commit Messages with Conventional Commits",
+  "content": "Standardized format for Git commit messages using Conventional Commits specification. Format: <type>[optional scope]: <description>. Types: feat (features), fix (bug fixes), docs (documentation), style (formatting), refactor (restructuring), test (tests), chore (maintenance), perf (performance). Rules: Type required and lowercase, scope optional, description in imperative mood, body explains WHAT/WHY, footer for breaking changes.",
+  "type": "workflow-rule",
+  "category": "git-workflow",
+  "tags": ["git", "workflow", "commit", "conventional-commits", "automation"],
+  "description": "Standardized format for Git commit messages that clearly communicates the intent and type of change. Based on Conventional Commits specification.",
+  "problemSolved": "Inconsistent commit messages make project history hard to read, automate changelog generation difficult, and reduce team collaboration efficiency.",
+  "source": {
+    "type": "project-doc",
+    "location": "docs/GIT_WORKFLOW.md",
+    "reference": "Commit Messages section"
+  },
+  "maturity": "proven",
+  "patternDetails": {
+    "format": "<type>[optional scope]: <description>",
+    "types": {
+      "feat": "New feature or functionality",
+      "fix": "Bug fix",
+      "docs": "Documentation changes",
+      "style": "Code style/formatting (no logic change)",
+      "refactor": "Code restructuring (no behavior change)",
+      "test": "Test-related changes",
+      "chore": "Maintenance/building tasks",
+      "perf": "Performance improvements"
+    },
+    "rules": [
+      "Type is required and must be lowercase",
+      "Scope is optional in parentheses",
+      "Description is required, imperative mood ('add' not 'added')",
+      "Body (optional) explains WHAT and WHY",
+      "Footer (optional) for breaking changes or issue references"
+    ],
+    "examples": [
+      "feat(auth): add OAuth2 login support",
+      "fix: resolve memory leak in cache layer",
+      "docs: update API endpoint documentation",
+      "chore: update dependencies to latest versions"
+    ]
+  },
+  "implementation": {
+    "steps": [
+      "Install commitlint and husky if not present",
+      "Add commitlint.config.js with conventional config",
+      "Set up git hook to validate commits",
+      "Train team on commit types and format"
+    ],
+    "dependencies": ["git", "commitlint", "husky"]
+  },
+  "validation": "Commit messages follow '<type>: <description>' format with valid types and imperative mood",
+  "author": "ai-memoria-system",
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-15"
+}
