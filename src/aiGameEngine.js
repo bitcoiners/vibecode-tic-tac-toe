@@ -6,7 +6,7 @@ import {
   getState, 
   makeMove as engineMakeMove, 
   resetGame
-} from './gameEngine.js';
+} from './engine/gameEngine.js';
 import { createAIOpponent } from './aiOpponent.js';
 import { convert1DTo2D, convertMoveToIndex } from './boardUtils.js';
 
