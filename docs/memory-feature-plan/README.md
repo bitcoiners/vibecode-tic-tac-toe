@@ -81,3 +81,20 @@ Create a persistent memory system that:
 - What to avoid and why
 - Common pitfalls and solutions
 - Security considerations
+
+## Integration with External Knowledge Sources
+
+### Source: Everything Claude Code (https://github.com/affaan-m/everything-claude-code)
+
+**Types of knowledge to integrate:**
+1. **AI Prompting Patterns** - How to effectively communicate with AI assistants
+2. **Code Generation Tips** - Best practices for AI-assisted coding
+3. **Debugging Strategies** - AI-powered debugging techniques
+4. **Learning Workflows** - How to use AI for continuous learning
+5. **Project Management** - AI-assisted planning and task management
+
+**Integration Approach:**
+- Extract patterns and principles (not copy entire content)
+- Generalize for broader applicability
+- Tag with source attribution
+- Connect to our existing workflow patterns

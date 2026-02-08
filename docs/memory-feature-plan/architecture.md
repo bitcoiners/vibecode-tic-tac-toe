@@ -87,3 +87,21 @@ scripts/memory-pipeline/
 - **Evolution of standards** over time
 - **Team feedback** on what works/doesn't work
 - **Performance metrics** of different workflows
+
+## External Knowledge Integration
+
+### Source: Everything Claude Code Repository
+```yaml
+integration:
+  source: https://github.com/affaan-m/everything-claude-code
+  extraction_method: pattern_mining
+  categories:
+    - ai_prompting
+    - code_generation
+    - debugging
+    - learning
+    - project_management
+  attribution:
+    required: true
+    format: "Based on: [source] - [specific tip/reference]"
+```

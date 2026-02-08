@@ -28,6 +28,11 @@
 
 ### Tasks:
 1. [ ] Build chat log extractor
+
+### External Integration Tasks (Milestone 2):
+7. [ ] Build external source extractor (everything-claude-code)
+8. [ ] Create pattern mining for AI-assisted development tips
+9. [ ] Integrate AI prompting patterns into workflow templates
 2. [ ] Create generalization transformer
 3. [ ] Implement categorization logic
 4. [ ] Build validation checks

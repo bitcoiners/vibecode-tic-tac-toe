@@ -93,3 +93,18 @@ mkdir schemas
 - **Decision Frameworks**: How to choose between alternatives
 - **Validation Checks**: Automated quality gates
 - **Process Flows**: Step-by-step workflows
+
+## External Knowledge Integration Preparation:
+
+### Review everything-claude-code repository:
+1. **Identify key patterns** that align with our development workflow
+2. **Note categorization** - How tips are organized in the source
+3. **Extract principles** not just specific examples
+4. **Plan integration points** with our existing memory system
+
+### Example patterns to look for:
+- AI prompting for code refactoring
+- AI-assisted testing strategies
+- Debugging with AI copilots
+- Learning new technologies with AI
+- Project planning with AI assistance
