@@ -1,5 +1,7 @@
 # Work Plan: Integration and Inspiration from Google Antigravity
 
+Inspired by : https://x.com/antigravity/status/2020180758606807471
+
 ## 🎯 Objective
 Enhance \`ai-memoria\` by analyzing and integrating patterns from Google Antigravity's "persistent memory" system while maintaining our project's unique vision and standalone potential.
 
